@@ -12,7 +12,9 @@ import com.dramtar.billscollecting.domain.Repository
 import com.dramtar.billscollecting.utils.getOnColor
 import com.dramtar.billscollecting.utils.getRndColor
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -28,6 +30,7 @@ class MainViewModel @Inject constructor(
         private set
     var colorState by mutableStateOf(Color(0))
         private set
+    private var billsJob: Job? = null
 
     private val updatingEvent = Channel<String>()
     val updatingEvents = updatingEvent.receiveAsFlow()
@@ -79,16 +82,6 @@ class MainViewModel @Inject constructor(
 
     private fun setFirstTypeSelected() {
         if (billListState.selectedBillTypeId.isNotBlank()) return
-        /*viewModelScope.launch {
-            billListState.billTypes?.forEach{
-                delay(500)
-                updatingEvent.send(it.name)
-                Log.i("TEST", "item:${it.name} red = ${it.color.red} blue = ${it.color.blue} green = ${it.color.green}")
-                repository.updateBillType(it.copy(invertedColor = it.color.getOnColor()))
-                //repository.updateBillType(it.copy(invertedColor = Color.White))
-            }
-        }*/
-
         billListState.billTypes.apply {
             if (this.isEmpty()) return
             billListState = billListState.copy(
@@ -99,7 +92,7 @@ class MainViewModel @Inject constructor(
 
     fun getBillTypes() {
         viewModelScope.launch {
-            repository.getBillTypes().collectLatest { typesList ->
+            repository.getBillTypes().cancellable().collectLatest { typesList ->
                 billListState = billListState.copy(
                     billTypes = typesList.sortedByDescending { it.priority }
                 )
@@ -113,7 +106,8 @@ class MainViewModel @Inject constructor(
     }
 
     fun getBills(start: Long, end: Long) {
-        viewModelScope.launch {
+        billsJob?.cancel()
+        billsJob = viewModelScope.launch {
             repository.getBills(start = start, end = end).collectLatest { billsList ->
                 billListState = billListState.copy(
                     bills = billsList,

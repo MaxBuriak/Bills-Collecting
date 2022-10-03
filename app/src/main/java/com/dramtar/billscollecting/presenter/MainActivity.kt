@@ -59,8 +59,7 @@ class MainActivity : ComponentActivity() {
                             },
                             selectedRangeDate = viewModel.billListState.selectedDateRange.time
                         )
-                    }) {
-
+                    }) { scaffoldPAdding ->
 //                        Box(modifier = Modifier.size(100.dp).background(viewModel.colorState)) {
 //                            //Button(onClick = { /*viewModel.getColor()*/},modifier = Modifier.align(Alignment.Center)) {
 //                                Text(
@@ -71,7 +70,7 @@ class MainActivity : ComponentActivity() {
 //                                )
 //                            //}
 //                        }
-
+                        scaffoldPAdding
                         val sheetState = rememberBottomSheetState(
                             initialValue = BottomSheetValue.Collapsed
                         )
@@ -102,8 +101,8 @@ class MainActivity : ComponentActivity() {
                                                 }
                                             }
                                         },
-                                        onBillTypeSelected = {
-                                            viewModel.billTypeSelected(it)
+                                        onBillTypeSelected = { id ->
+                                            viewModel.billTypeSelected(id)
                                         },
                                         onAddBillTypeClick = {
                                             viewModel.onAddBillTypeButtonClick()
@@ -126,7 +125,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                             sheetBackgroundColor = Color.Transparent
-                        ) {
+                        ) { scaffoldPadding ->
 
                             val calendar = Calendar.getInstance()
                             calendar.set(Calendar.YEAR, 2010)
@@ -167,7 +166,9 @@ class MainActivity : ComponentActivity() {
                             }
 
                             Surface(color = MaterialTheme.colorScheme.background) {
-                                Column(modifier = Modifier.fillMaxSize()) {
+                                Column(modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(scaffoldPadding)) {
                                     LazyColumn(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -189,7 +190,6 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        it
                     }
                 }
             }

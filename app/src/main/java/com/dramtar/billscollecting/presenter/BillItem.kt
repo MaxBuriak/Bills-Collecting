@@ -25,7 +25,7 @@ fun BillItem(item: BillData, onItemClick: (BillData) -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "${item.amount}",
+            text = item.formattedAmount,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.weight(1f),
