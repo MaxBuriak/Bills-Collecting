@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,21 +18,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.dramtar.billscollecting.presenter.composedatepicker.ComposeCalendar
 import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
+import com.dramtar.billscollecting.utils.getDayDayOfWeek
 import com.dt.composedatepicker.SelectDateListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @AndroidEntryPoint
@@ -45,7 +50,6 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(this@MainActivity, "$it already updated!", Toast.LENGTH_SHORT).show()
             }
         }
-
         setContent {
             val calendarShowing = remember { mutableStateOf(false) }
             BillsCollectingTheme {
@@ -54,9 +58,7 @@ class MainActivity : ComponentActivity() {
                         AppBar(
                             onNavigationClick = {},
                             viewModel.billListState.totalSum,
-                            onDateClick = {
-                                calendarShowing.value = true
-                            },
+                            onDateClick = { calendarShowing.value = true },
                             selectedRangeDate = viewModel.billListState.selectedDateRange.time
                         )
                     }) { scaffoldPAdding ->
@@ -164,11 +166,15 @@ class MainActivity : ComponentActivity() {
                                         })
                                 }
                             }
+                            val grouped =
+                                viewModel.billListState.bills?.groupBy { it.date.getDayDayOfWeek() }
 
                             Surface(color = MaterialTheme.colorScheme.background) {
-                                Column(modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(scaffoldPadding)) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(scaffoldPadding)
+                                ) {
                                     LazyColumn(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -176,14 +182,47 @@ class MainActivity : ComponentActivity() {
                                         verticalArrangement = Arrangement.spacedBy(12.dp)
                                     ) {
                                         viewModel.billListState.bills?.let {
-                                            items(it) { bill ->
-                                                BillItem(
-                                                    item = bill,
-                                                    onItemClick = {})
-                                                Divider(
-                                                    color = Color.Gray,
-                                                    modifier = Modifier.padding(horizontal = 16.dp)
-                                                )
+                                            grouped?.forEach { (date, collectionsInAccount) ->
+                                                stickyHeader {
+                                                    Box(modifier = Modifier.fillMaxWidth().padding(
+                                                        top = 16.dp,
+                                                        start = 8.dp,
+                                                        end = 16.dp,
+                                                        bottom = 8.dp
+                                                    )) {
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .clip(
+                                                                    RoundedCornerShape(10.dp)
+                                                                )
+                                                                .background(MaterialTheme.colorScheme.tertiary)
+                                                                .align(Center)
+                                                        ) {
+                                                            Text(
+                                                                date,
+                                                                color = MaterialTheme.colorScheme.onTertiary,
+                                                                style = MaterialTheme.typography.titleLarge,
+                                                                fontWeight = FontWeight.Bold,
+                                                                modifier = Modifier
+                                                                    .align(Center)
+                                                                    .padding(6.dp)
+                                                            )
+                                                        }
+                                                    }
+                                                }
+
+                                                items(
+                                                    items = collectionsInAccount,
+                                                    key = { collection -> collection.id!! }
+                                                ) { collection ->
+                                                    BillItem(
+                                                        item = collection,
+                                                        onItemClick = {})
+                                                    Divider(
+                                                        color = Color.Gray,
+                                                        modifier = Modifier.padding(horizontal = 16.dp)
+                                                    )
+                                                }
                                             }
                                         }
                                     }

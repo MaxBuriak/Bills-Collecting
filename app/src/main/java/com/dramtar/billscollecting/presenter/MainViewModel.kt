@@ -73,7 +73,9 @@ class MainViewModel @Inject constructor(
             selectedDateRange = date
         )
         calender.set(Calendar.DAY_OF_MONTH, calender.getActualMinimum(Calendar.DAY_OF_MONTH))
+        calender.set(Calendar.HOUR_OF_DAY, 0)
         val min = calender.timeInMillis
+        calender.set(Calendar.HOUR_OF_DAY, 0)
         calender.set(Calendar.DAY_OF_MONTH, calender.getActualMaximum(Calendar.DAY_OF_MONTH))
         val max = calender.timeInMillis
 
