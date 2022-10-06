@@ -82,6 +82,14 @@ class MainViewModel @Inject constructor(
         getBills(start = min, end = max)
     }
 
+    fun onDeleteButtonClicked(data: BillData) {
+        data.id?.let { id ->
+            viewModelScope.launch {
+                repository.deleteBill(id)
+            }
+        }
+    }
+
     private fun setFirstTypeSelected() {
         if (billListState.selectedBillTypeId.isNotBlank()) return
         billListState.billTypes.apply {

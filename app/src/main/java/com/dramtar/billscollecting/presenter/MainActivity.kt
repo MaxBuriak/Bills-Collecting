@@ -184,12 +184,16 @@ class MainActivity : ComponentActivity() {
                                         viewModel.billListState.bills?.let {
                                             grouped?.forEach { (date, collectionsInAccount) ->
                                                 stickyHeader {
-                                                    Box(modifier = Modifier.fillMaxWidth().padding(
-                                                        top = 16.dp,
-                                                        start = 8.dp,
-                                                        end = 16.dp,
-                                                        bottom = 8.dp
-                                                    )) {
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                            .padding(
+                                                                top = 16.dp,
+                                                                start = 8.dp,
+                                                                end = 16.dp,
+                                                                bottom = 8.dp
+                                                            )
+                                                    ) {
                                                         Box(
                                                             modifier = Modifier
                                                                 .clip(
@@ -216,8 +220,12 @@ class MainActivity : ComponentActivity() {
                                                     key = { collection -> collection.id!! }
                                                 ) { collection ->
                                                     BillItem(
-                                                        item = collection,
-                                                        onItemClick = {})
+                                                        data = collection,
+                                                        onItemClick = {},
+                                                        onDeleteButtonClick = { data ->
+                                                            viewModel.onDeleteButtonClicked(data)
+                                                        }
+                                                    )
                                                     Divider(
                                                         color = Color.Gray,
                                                         modifier = Modifier.padding(horizontal = 16.dp)
