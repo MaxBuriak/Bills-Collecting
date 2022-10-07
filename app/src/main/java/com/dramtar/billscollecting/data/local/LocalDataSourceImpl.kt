@@ -38,4 +38,8 @@ class LocalDataSourceImpl @Inject constructor(
     override suspend fun updateBillTypeEntity(billEntity: BillTypeEntity) {
         billTypeDao.updateBillType(billEntity)
     }
+
+    override suspend fun deleteBillType(id: String) {
+        billTypeDao.deleteBill(id = id)
+    }
 }

@@ -122,6 +122,11 @@ class MainActivity : ComponentActivity() {
                                                     scaffoldState.bottomSheetState.expand()
                                                 }
                                             }
+                                        },
+                                        onBillTypeDelete = {
+                                            viewModel.onBillTypeDeleteButtonClicked(
+                                                it
+                                            )
                                         }
                                     )
                                 }
@@ -223,7 +228,7 @@ class MainActivity : ComponentActivity() {
                                                         data = collection,
                                                         onItemClick = {},
                                                         onDeleteButtonClick = { data ->
-                                                            viewModel.onDeleteButtonClicked(data)
+                                                            viewModel.onBillDeleteButtonClicked(data)
                                                         }
                                                     )
                                                     Divider(

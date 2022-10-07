@@ -52,4 +52,8 @@ class RepositoryImpl @Inject constructor(
     override suspend fun updateBillType(billTypeData: BillTypeData) {
         localDataSource.updateBillTypeEntity(billEntity = billTypeData.mapToBillTypeEntity())
     }
+
+    override suspend fun deleteBillType(id: String) {
+        localDataSource.deleteBillType(id = id)
+    }
 }

@@ -52,11 +52,12 @@ fun BillItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             BillTypeItem(
-                billType = data.billTypeData,
+                data = data.billTypeData,
                 selectedBillTypeId = "",
                 onBillTypeSelected = {},
                 modifier = Modifier.weight(1f),
-                onNameChanged = {}
+                onNameChanged = {},
+                onDeleteButtonClick = {}
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(

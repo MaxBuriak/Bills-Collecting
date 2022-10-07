@@ -11,4 +11,5 @@ interface Repository {
     suspend fun saveBillType(billTypeData: BillTypeData)
     suspend fun getBillTypeById(id: String): BillTypeData
     suspend fun updateBillType(billTypeData: BillTypeData)
+    suspend fun deleteBillType(id: String)
 }

@@ -13,4 +13,5 @@ interface LocalDataSource {
     suspend fun getBillTypes(): Flow<List<BillTypeEntity>>
     suspend fun getBillTypeById(id: String): BillTypeEntity?
     suspend fun updateBillTypeEntity(billEntity: BillTypeEntity)
+    suspend fun deleteBillType(id: String)
 }

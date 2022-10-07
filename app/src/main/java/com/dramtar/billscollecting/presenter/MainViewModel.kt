@@ -82,11 +82,17 @@ class MainViewModel @Inject constructor(
         getBills(start = min, end = max)
     }
 
-    fun onDeleteButtonClicked(data: BillData) {
+    fun onBillDeleteButtonClicked(data: BillData) {
         data.id?.let { id ->
             viewModelScope.launch {
                 repository.deleteBill(id)
             }
+        }
+    }
+
+    fun onBillTypeDeleteButtonClicked(data: BillTypeData) {
+        viewModelScope.launch {
+            repository.deleteBillType(data.id)
         }
     }
 

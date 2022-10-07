@@ -2,6 +2,7 @@ package com.dramtar.billscollecting.presenter
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -40,6 +41,7 @@ import com.dramtar.billscollecting.utils.getDayMonthYear
 import kotlinx.coroutines.launch
 import java.util.*
 
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
 fun BillBottomBar(
@@ -51,6 +53,7 @@ fun BillBottomBar(
     billsState: BillsState,
     tmpBillType: BillTypeData?,
     onAmountClicked: () -> Unit,
+    onBillTypeDelete: (BillTypeData) -> Unit
 ) {
     val amountInputValue = remember { mutableStateOf(TextFieldValue()) }
     val billTypeName = remember { mutableStateOf(String()) }
@@ -160,25 +163,27 @@ fun BillBottomBar(
                     bottom = 12.dp
                 ),
                 // content spacing
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(1.dp)
             ) {
                 items(billsState.billTypes) { billTypeData ->
                     BillTypeItem(
-                        billType = billTypeData,
+                        data = billTypeData,
                         selectedBillTypeId = billsState.selectedBillTypeId,
                         onBillTypeSelected = onBillTypeSelected,
-                        modifier = Modifier.height(65.dp),
-                        onNameChanged = {}
+                        modifier = Modifier.height(73.dp),
+                        onNameChanged = {},
+                        onDeleteButtonClick = onBillTypeDelete
                     )
                 }
 
                 tmpBillType?.let { billType ->
                     item {
                         BillTypeItem(
-                            billType = billType,
+                            data = billType,
                             onBillTypeSelected = {},
                             modifier = Modifier.height(65.dp),
-                            onNameChanged = { billTypeName.value = it }
+                            onNameChanged = { billTypeName.value = it },
+                            onDeleteButtonClick = {}
                         )
                     }
                 }
@@ -236,6 +241,7 @@ fun BillBottomBar(
     }
 }
 
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
 @Preview
@@ -250,6 +256,7 @@ fun BottomBarPreview() {
         onAddBillButtonCLick = { _, _ -> },
         tmpBillType = null,
         onCompleteBillTypeClick = {},
-        onAmountClicked = {}
+        onAmountClicked = {},
+        onBillTypeDelete = {}
     )
 }
