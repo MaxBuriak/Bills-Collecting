@@ -93,6 +93,9 @@ class MainViewModel @Inject constructor(
     fun onBillTypeDeleteButtonClicked(data: BillTypeData) {
         viewModelScope.launch {
             repository.deleteBillType(data.id)
+            if (billListState.selectedBillTypeId == data.id) {
+                billListState = billListState.copy(selectedBillTypeId = "")
+            }
         }
     }
 

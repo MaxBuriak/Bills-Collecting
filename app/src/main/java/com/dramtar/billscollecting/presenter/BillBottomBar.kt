@@ -162,10 +162,12 @@ fun BillBottomBar(
                     top = 12.dp,
                     bottom = 12.dp
                 ),
-                // content spacing
                 horizontalArrangement = Arrangement.spacedBy(1.dp)
             ) {
-                items(billsState.billTypes) { billTypeData ->
+                items(
+                    items = billsState.billTypes,
+                    key = { collection -> collection.id }
+                ) { billTypeData ->
                     BillTypeItem(
                         data = billTypeData,
                         selectedBillTypeId = billsState.selectedBillTypeId,
@@ -181,7 +183,7 @@ fun BillBottomBar(
                         BillTypeItem(
                             data = billType,
                             onBillTypeSelected = {},
-                            modifier = Modifier.height(65.dp),
+                            modifier = Modifier.height(73.dp),
                             onNameChanged = { billTypeName.value = it },
                             onDeleteButtonClick = {}
                         )

@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
@@ -26,11 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,29 +49,36 @@ fun BillTypeItem(
     onNameChanged: (name: String) -> Unit,
     onDeleteButtonClick: (BillTypeData) -> Unit
 ) {
-
     val deleteButtonState = remember { mutableStateOf(false) }
     val nameInputValue = remember { mutableStateOf(TextFieldValue()) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Box(modifier,
-        contentAlignment = Alignment.Center) {
-        if (data.name.isBlank()) {
-            Box(
-                modifier = Modifier.fillMaxSize()
-                    .padding(4.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(data.color)
-                    .selectable(
-                        selected = selectedBillTypeId == data.id,
-                        onClick = { onBillTypeSelected(data.id) },
-                    )
-                    .padding(vertical = 6.dp, horizontal = 3.dp),
-                contentAlignment = Alignment.Center
-            ) {
-
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .padding(8.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(data.color)
+                .fillMaxWidth()
+                .padding(vertical = 6.dp, horizontal = 3.dp)
+                .selectable(
+                    selected = selectedBillTypeId == data.id,
+                    onClick = {},
+                )
+                .combinedClickable(
+                    onClick = {
+                    if (!deleteButtonState.value) onBillTypeSelected(data.id)
+                    deleteButtonState.value = false
+                }, onLongClick = { deleteButtonState.value = true }
+                )
+        ) {
+            if (data.name.isBlank()) {
                 val focusRequester = remember { FocusRequester() }
-                TextField(
+                BasicTextField(
                     value = nameInputValue.value,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Done
@@ -79,12 +88,22 @@ fun BillTypeItem(
                         nameInputValue.value = it
                         onNameChanged(it.text)
                     },
+
                     modifier = Modifier
                         .defaultMinSize(minWidth = 70.dp)
-                        .padding(horizontal = 4.dp)
+                        .padding(8.dp)
                         .focusRequester(focusRequester),
                     textStyle = TextStyle(
-                        color = data.invertedColor, fontSize = 18.sp
+                        color = data.invertedColor,
+                        fontSize = 18.sp
+                    ),
+                    cursorBrush = Brush.verticalGradient(
+                        0.00f to data.invertedColor,
+                        0.35f to data.invertedColor,
+                        0.35f to data.invertedColor,
+                        0.90f to data.invertedColor,
+                        0.90f to data.invertedColor,
+                        1.00f to data.invertedColor,
                     ),
                     singleLine = true,
                     maxLines = 1,
@@ -92,61 +111,42 @@ fun BillTypeItem(
                 LaunchedEffect(Unit) {
                     focusRequester.requestFocus()
                 }
-            }
-        } else {
-            Box(
-                modifier = Modifier.fillMaxSize()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(data.color)
-                    .padding(vertical = 6.dp, horizontal = 3.dp)
-                    .selectable(
-                        selected = selectedBillTypeId == data.id,
-                        onClick = {},
-                    )
-                    .combinedClickable(onClick = {
-                        if (!deleteButtonState.value) onBillTypeSelected(data.id)
-                        deleteButtonState.value = false
-                    }, onLongClick = { deleteButtonState.value = true }),
+            } else {
+                Text(
+                    text = data.name,
+                    fontSize = 18.sp,
+                    color = data.invertedColor,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                )
 
-                contentAlignment = Alignment.Center
-            ) {
-                Row {
-                    Text(
-                        text = data.name,
-                        fontSize = 18.sp,
-                        color = data.invertedColor,
+                if (data.id == selectedBillTypeId) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        tint = data.invertedColor,
+                        contentDescription = null,
                         modifier = Modifier
                             .padding(8.dp)
-                            .align(Alignment.CenterVertically)
                     )
-
-                    if (data.id == selectedBillTypeId) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            tint = data.invertedColor,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                                .padding(horizontal = 8.dp)
-                        )
-                    }
                 }
             }
-            if (deleteButtonState.value && selectedBillTypeId.isNotBlank()) {
-                Box(modifier = Modifier
-                    .clip(CircleShape)
-                    .background(Color.Red)
-                    .padding(4.dp)
-                    .align(Alignment.TopEnd)
-                    .clickable { onDeleteButtonClick(data) }) {
-                    androidx.compose.material3.Icon(
-                        imageVector = Icons.Default.Delete,
-                        tint = Color.White,
-                        contentDescription = "delete button",
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
+        }
+        if (deleteButtonState.value && selectedBillTypeId.isNotBlank()) {
+            Box(modifier = Modifier
+                .clip(CircleShape)
+                .background(Color.Red)
+                .padding(4.dp)
+                .align(Alignment.TopEnd)
+                .clickable { onDeleteButtonClick(data) }) {
+                androidx.compose.material3.Icon(
+                    imageVector = Icons.Default.Delete,
+                    tint = Color.White,
+                    contentDescription = "delete button",
+                    modifier = Modifier.size(20.dp)
+                )
             }
         }
     }
@@ -157,8 +157,12 @@ fun BillTypeItem(
 @Composable
 @Preview
 fun BillTypePreview() {
-    BillTypeItem(data = BillTypeData(name = ""),
-        modifier = Modifier.height(65.dp),
+    BillTypeItem(data = BillTypeData(
+        name = "kekwwwwwwwwwwwww",
+        id = "kekwwwwwwwwwwwww"
+    ),
+        selectedBillTypeId = "kekwwwwwwwwwwwww",
+        modifier = Modifier.height(73.dp),
         onBillTypeSelected = {},
         onNameChanged = {},
         onDeleteButtonClick = {})
