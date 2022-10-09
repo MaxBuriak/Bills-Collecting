@@ -3,8 +3,12 @@ package com.dramtar.billscollecting.presenter
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +61,7 @@ fun AppBar(
         },
         /*backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.onPrimary,*/
-        /*navigationIcon = {
+        navigationIcon = {
             IconButton(onClick = onNavigationClick) {
                 Icon(
                     imageVector = Icons.Default.Menu,
@@ -65,7 +69,7 @@ fun AppBar(
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
-        },*/
+        },
         backgroundColor = MaterialTheme.colorScheme.primary
     )
 }
