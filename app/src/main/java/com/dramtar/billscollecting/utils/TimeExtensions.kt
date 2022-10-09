@@ -11,7 +11,7 @@ private const val TIME_STAMP_FORMAT = "EEEE, MMMM d, yyyy - hh:mm:ss a"
 private const val DATE_YEAR_MONTH_DAY_FORMAT = "yyyy/MM/dd"
 private const val DATE_DAY_MONTH_YEAR_FORMAT = "dd/MM/yyyy"
 private const val DATE_DAY_DAY_OF_WEEK_FORMAT = "EEE dd MMM"
-private const val DATE_HOUR_MINUTE_FORMAT = "hh:mm"
+private const val DATE_HOUR_MINUTE_FORMAT = "HH:mm"
 private const val DATE_MONTH_YEAR_FORMAT = "MMM yyyy"
 
 fun Long.getTimeStamp(): String {
