@@ -19,6 +19,10 @@ class LocalDataSourceImpl @Inject constructor(
         return billDao.getBills(start = start, end = end)
     }
 
+    override suspend fun deleteBill(id: Int) {
+        billDao.deleteBill(id)
+    }
+
     override suspend fun saveBillType(billEntity: BillTypeEntity) {
         billTypeDao.saveBillType(billEntity)
     }
@@ -33,5 +37,9 @@ class LocalDataSourceImpl @Inject constructor(
 
     override suspend fun updateBillTypeEntity(billEntity: BillTypeEntity) {
         billTypeDao.updateBillType(billEntity)
+    }
+
+    override suspend fun deleteBillType(id: String) {
+        billTypeDao.deleteBill(id = id)
     }
 }

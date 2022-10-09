@@ -13,4 +13,7 @@ interface BillDao {
 
     @Query("SELECT * FROM bill_table WHERE timestamp > :start AND timestamp < :end ORDER BY timestamp DESC ")
     fun getBills(start: Long, end: Long): Flow<List<BillEntity>>
+
+    @Query("DELETE FROM bill_table WHERE id = :id")
+    suspend fun deleteBill(id: Int)
 }
