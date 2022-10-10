@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             NavHost(navController, startDestination = "main") {
                 composable("main") { MainScreen(navController, viewModel = viewModel) }
-                composable("overview") { OverviewScreen() }
+                composable("overview") { OverviewScreen(navController, viewModel = viewModel) }
             }
         }
 

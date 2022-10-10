@@ -1,5 +1,7 @@
 package com.dramtar.billscollecting.utils
 
 import java.text.NumberFormat
+import kotlin.math.roundToInt
 
-fun Double.formatCurrency() = NumberFormat.getCurrencyInstance().format(this)
+fun Double.formatCurrency(): String = NumberFormat.getCurrencyInstance().format(this)
+fun Float.getFormattedPercentage(): String = "${(this * 100).roundToInt()}%"

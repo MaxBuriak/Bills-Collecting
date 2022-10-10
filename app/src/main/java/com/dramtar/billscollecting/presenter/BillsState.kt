@@ -2,6 +2,7 @@ package com.dramtar.billscollecting.presenter
 
 import com.dramtar.billscollecting.domain.BillData
 import com.dramtar.billscollecting.domain.BillTypeData
+import com.dramtar.billscollecting.domain.BillTypeGrouped
 import java.util.*
 
 data class BillsState(
@@ -12,5 +13,6 @@ data class BillsState(
     val isLoading: Boolean = false,
     val selectedBillTypeId: String = "",
     var errorString: String? = null,
-    var selectedDateRange: Date = Calendar.getInstance().time
+    var selectedDateRange: Date = Calendar.getInstance().time,
+    var overviewTypesList: List<BillTypeGrouped>? = null
 )
