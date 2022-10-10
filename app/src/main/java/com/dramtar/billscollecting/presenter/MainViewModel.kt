@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dramtar.billscollecting.domain.BillData
 import com.dramtar.billscollecting.domain.BillTypeData
+import com.dramtar.billscollecting.domain.BillTypeGrouped
 import com.dramtar.billscollecting.domain.Repository
-import com.dramtar.billscollecting.utils.getOnColor
-import com.dramtar.billscollecting.utils.getRndColor
+import com.dramtar.billscollecting.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -38,6 +38,28 @@ class MainViewModel @Inject constructor(
     init {
         selectDateRange()
         getBillTypes()
+    }
+
+    private fun overviewData() {
+        billListState.bills?.let { bills ->
+            val groupedBills = bills.groupBy { it.billTypeData}
+
+            val listOfSum = groupedBills.mapValues { it.value.sumOf { it.amount } }.map {
+                val percentage = (it.value / (billListState.totalSum)).toFloat()
+                BillTypeGrouped(
+                    type = it.key,
+                    sumAmount = it.value,
+                    formattedSumAmount = it.value.formatCurrency(),
+                    percentage = percentage,
+                    formattedPercentage = percentage.getFormattedPercentage()
+                )
+            }
+
+            billListState = billListState.copy(
+                overviewTypesList = listOfSum.sortedByDescending { it.percentage }
+            )
+            //toList().sortedByDescending { it.second }.toMap()
+        }
     }
 
     fun onAddBillTypeButtonClick() {
@@ -128,10 +150,13 @@ class MainViewModel @Inject constructor(
         billsJob?.cancel()
         billsJob = viewModelScope.launch {
             repository.getBills(start = start, end = end).collectLatest { billsList ->
+                val sum = billsList.sumOf { it.amount }.roundToInt()
                 billListState = billListState.copy(
                     bills = billsList,
-                    totalSum = billsList.sumOf { it.amount }.roundToInt()
+                    totalSum = sum,
+                    formattedTotalSum = sum.getFormattedLocalCurrency()
                 )
+                overviewData()
             }
         }
     }
