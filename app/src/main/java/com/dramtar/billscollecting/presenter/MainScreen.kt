@@ -41,10 +41,11 @@ fun MainScreen(
         Surface {
             Scaffold(topBar = {
                 AppBar(
-                    onNavigationClick = {navController.navigate("overview") },
+                    onNavigationClick = {},
                     viewModel.billListState.totalSum,
                     onDateClick = { calendarShowing.value = true },
-                    selectedRangeDate = viewModel.billListState.selectedDateRange.time
+                    selectedRangeDate = viewModel.billListState.selectedDateRange.time,
+                    onChartsClick = { navController.navigate("overview") }
                 )
             }) { scaffoldPAdding ->
 //                        Box(modifier = Modifier.size(100.dp).background(viewModel.colorState)) {

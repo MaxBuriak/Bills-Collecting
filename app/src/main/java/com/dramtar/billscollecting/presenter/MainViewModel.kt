@@ -10,10 +10,7 @@ import com.dramtar.billscollecting.domain.BillData
 import com.dramtar.billscollecting.domain.BillTypeData
 import com.dramtar.billscollecting.domain.BillTypeGrouped
 import com.dramtar.billscollecting.domain.Repository
-import com.dramtar.billscollecting.utils.formatCurrency
-import com.dramtar.billscollecting.utils.getFormattedPercentage
-import com.dramtar.billscollecting.utils.getOnColor
-import com.dramtar.billscollecting.utils.getRndColor
+import com.dramtar.billscollecting.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -153,9 +150,11 @@ class MainViewModel @Inject constructor(
         billsJob?.cancel()
         billsJob = viewModelScope.launch {
             repository.getBills(start = start, end = end).collectLatest { billsList ->
+                val sum = billsList.sumOf { it.amount }.roundToInt()
                 billListState = billListState.copy(
                     bills = billsList,
-                    totalSum = billsList.sumOf { it.amount }.roundToInt()
+                    totalSum = sum,
+                    formattedTotalSum = sum.getFormattedLocalCurrency()
                 )
                 overviewData()
             }
