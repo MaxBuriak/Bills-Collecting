@@ -37,7 +37,7 @@ fun OverviewScreen(
                 )
                 Text(
                     "Total amount ${viewModel.billListState.formattedTotalSum}",
-                    fontSize = 32.sp,
+                    fontSize = 28.sp,
                     modifier = Modifier
                         .padding(16.dp)
                         .align(CenterHorizontally),

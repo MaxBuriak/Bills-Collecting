@@ -38,7 +38,7 @@ fun AmountChartItem(
         LinearProgressIndicator(
             modifier = Modifier
                 .height(15.dp)
-                .weight(.4F),
+                .weight(.3F),
             progress = progress,
             color = data.color,
         )

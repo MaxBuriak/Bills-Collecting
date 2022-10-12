@@ -45,7 +45,6 @@ import java.util.*
 @ExperimentalComposeUiApi
 @Composable
 fun BillBottomBar(
-    onCalendarClick: () -> Unit,
     onAddBillButtonCLick: (amount: Double, date: Long) -> Unit,
     onBillTypeSelected: (id: String) -> Unit,
     onAddBillTypeClick: () -> Unit,
@@ -133,10 +132,7 @@ fun BillBottomBar(
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(
                     modifier = Modifier
-                        .clickable {
-                            mDatePickerDialog.show()
-                            onCalendarClick()
-                        },
+                        .clickable { mDatePickerDialog.show() },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -249,7 +245,6 @@ fun BillBottomBar(
 @Preview
 fun BottomBarPreview() {
     BillBottomBar(
-        onCalendarClick = { /*TODO*/ },
         billsState = BillsState(
             billTypes = listOf(BillTypeData(), BillTypeData(), BillTypeData())
         ),

@@ -41,7 +41,7 @@ fun BillItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = 16.dp)
                 .combinedClickable(
                     onClick = {
                         if (!deleteButtonState.value) onItemClick(data)
@@ -55,7 +55,7 @@ fun BillItem(
                 data = data.billTypeData,
                 selectedBillTypeId = "",
                 onBillTypeSelected = {},
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(.5f),
                 onNameChanged = {},
                 onDeleteButtonClick = {}
             )
@@ -63,7 +63,7 @@ fun BillItem(
             Text(
                 text = data.date.getHourMinute(),
                 fontSize = 16.sp,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(.2f),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -73,7 +73,7 @@ fun BillItem(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(.3f),
                 color = MaterialTheme.colorScheme.onBackground
             )
         }

@@ -42,7 +42,7 @@ class MainViewModel @Inject constructor(
 
     private fun overviewData() {
         billListState.bills?.let { bills ->
-            val groupedBills = bills.groupBy { it.billTypeData}
+            val groupedBills = bills.groupBy { it.billTypeData }
 
             val listOfSum = groupedBills.mapValues { it.value.sumOf { it.amount } }.map {
                 val percentage = (it.value / (billListState.totalSum)).toFloat()
@@ -86,6 +86,11 @@ class MainViewModel @Inject constructor(
             )
             addBillType()
         }
+    }
+
+    private fun getGroupedByDateBillsList() {
+        billListState =
+            billListState.copy(gropedByDateBillsList = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
     }
 
     fun selectDateRange(date: Date = billListState.selectedDateRange) {
@@ -157,6 +162,7 @@ class MainViewModel @Inject constructor(
                     formattedTotalSum = sum.getFormattedLocalCurrency()
                 )
                 overviewData()
+                getGroupedByDateBillsList()
             }
         }
     }

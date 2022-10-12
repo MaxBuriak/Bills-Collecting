@@ -17,12 +17,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dramtar.billscollecting.presenter.composedatepicker.ComposeCalendar
 import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
-import com.dramtar.billscollecting.utils.getDayDayOfWeek
 import com.dt.composedatepicker.SelectDateListener
 import kotlinx.coroutines.launch
 import java.util.*
@@ -36,7 +34,19 @@ fun MainScreen(
     viewModel: MainViewModel
 ) {
     val calendarShowing = remember { mutableStateOf(false) }
-
+    val sheetState = rememberBottomSheetState(
+        initialValue = BottomSheetValue.Collapsed
+    )
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = sheetState,
+    )
+    val scope = rememberCoroutineScope()
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.YEAR, 2010)
+    calendar.set(Calendar.MONTH, 6)
+    val calendarMax = Calendar.getInstance()
+    calendarMax.set(Calendar.YEAR, 2032)
+    calendarMax.set(Calendar.MONTH, 9)
     BillsCollectingTheme {
         Surface {
             Scaffold(topBar = {
@@ -48,24 +58,7 @@ fun MainScreen(
                     onChartsClick = { navController.navigate("overview") }
                 )
             }) { scaffoldPAdding ->
-//                        Box(modifier = Modifier.size(100.dp).background(viewModel.colorState)) {
-//                            //Button(onClick = { /*viewModel.getColor()*/},modifier = Modifier.align(Alignment.Center)) {
-//                                Text(
-//                                    text = "click",
-//                                    color = viewModel.colorState.getOnColor(),
-//                                    fontSize = 32.sp
-//
-//                                )
-//                            //}
-//                        }
                 scaffoldPAdding
-                val sheetState = rememberBottomSheetState(
-                    initialValue = BottomSheetValue.Collapsed
-                )
-                val scaffoldState = rememberBottomSheetScaffoldState(
-                    bottomSheetState = sheetState,
-                )
-                val scope = rememberCoroutineScope()
                 BottomSheetScaffold(
                     scaffoldState = scaffoldState,
                     sheetPeekHeight = 100.dp,
@@ -76,7 +69,6 @@ fun MainScreen(
                                 .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
                         ) {
                             BillBottomBar(
-                                onCalendarClick = {},
                                 billsState = viewModel.billListState,
                                 onAddBillButtonCLick = { amount, date ->
                                     viewModel.addBill(
@@ -89,9 +81,7 @@ fun MainScreen(
                                         }
                                     }
                                 },
-                                onBillTypeSelected = { id ->
-                                    viewModel.billTypeSelected(id)
-                                },
+                                onBillTypeSelected = { id -> viewModel.billTypeSelected(id) },
                                 onAddBillTypeClick = {
                                     viewModel.onAddBillTypeButtonClick()
                                     /*scope.launch {
@@ -109,24 +99,12 @@ fun MainScreen(
                                         }
                                     }
                                 },
-                                onBillTypeDelete = {
-                                    viewModel.onBillTypeDeleteButtonClicked(
-                                        it
-                                    )
-                                }
+                                onBillTypeDelete = { viewModel.onBillTypeDeleteButtonClicked(it) }
                             )
                         }
                     },
                     sheetBackgroundColor = Color.Transparent
                 ) { scaffoldPadding ->
-
-                    val calendar = Calendar.getInstance()
-                    calendar.set(Calendar.YEAR, 2010)
-                    calendar.set(Calendar.MONTH, 6)
-                    val calendarMax = Calendar.getInstance()
-                    calendarMax.set(Calendar.YEAR, 2032)
-                    calendarMax.set(Calendar.MONTH, 9)
-
                     if (calendarShowing.value) {
                         Box(
                             Modifier
@@ -157,9 +135,6 @@ fun MainScreen(
                                 })
                         }
                     }
-                    val grouped =
-                        viewModel.billListState.bills?.groupBy { it.date.getDayDayOfWeek() }
-
                     Surface(color = MaterialTheme.colorScheme.background) {
                         Column(
                             modifier = Modifier
@@ -170,42 +145,11 @@ fun MainScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .weight(1F),
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                                verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                viewModel.billListState.bills?.let {
-                                    grouped?.forEach { (date, collectionsInAccount) ->
-                                        stickyHeader {
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(
-                                                        top = 16.dp,
-                                                        start = 8.dp,
-                                                        end = 16.dp,
-                                                        bottom = 8.dp
-                                                    )
-                                            ) {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .clip(
-                                                            RoundedCornerShape(10.dp)
-                                                        )
-                                                        .background(MaterialTheme.colorScheme.tertiary)
-                                                        .align(Alignment.Center)
-                                                ) {
-                                                    Text(
-                                                        date,
-                                                        color = MaterialTheme.colorScheme.onTertiary,
-                                                        style = MaterialTheme.typography.titleLarge,
-                                                        fontWeight = FontWeight.Bold,
-                                                        modifier = Modifier
-                                                            .align(Alignment.Center)
-                                                            .padding(6.dp)
-                                                    )
-                                                }
-                                            }
-                                        }
-
+                                viewModel.billListState.gropedByDateBillsList?.let { list ->
+                                    list.forEach { (date, collectionsInAccount) ->
+                                        stickyHeader { DateStickyHeader(formattedDate = date) }
                                         items(
                                             items = collectionsInAccount,
                                             key = { collection -> collection.id!! }
@@ -216,10 +160,6 @@ fun MainScreen(
                                                 onDeleteButtonClick = { data ->
                                                     viewModel.onBillDeleteButtonClicked(data)
                                                 }
-                                            )
-                                            Divider(
-                                                color = Color.Gray,
-                                                modifier = Modifier.padding(horizontal = 16.dp)
                                             )
                                         }
                                     }
