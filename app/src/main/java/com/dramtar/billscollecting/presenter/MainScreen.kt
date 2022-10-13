@@ -17,8 +17,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.dramtar.billscollecting.R
 import com.dramtar.billscollecting.presenter.composedatepicker.ComposeCalendar
 import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 import com.dt.composedatepicker.SelectDateListener
@@ -52,7 +54,7 @@ fun MainScreen(
             Scaffold(topBar = {
                 AppBar(
                     onNavigationClick = {},
-                    viewModel.billListState.totalSum,
+                    viewModel.billListState.formattedTotalSum,
                     onDateClick = { calendarShowing.value = true },
                     selectedRangeDate = viewModel.billListState.selectedDateRange.time,
                     onChartsClick = { navController.navigate("overview") }
@@ -122,7 +124,7 @@ fun MainScreen(
                                 maxDate = calendarMax.time,
                                 locale = Locale("en"),
                                 initialDate = viewModel.billListState.selectedDateRange,
-                                title = "Select Date",
+                                title = stringResource(id = R.string.select_date_title),
                                 listener = object : SelectDateListener {
                                     override fun onDateSelected(date: Date) {
                                         viewModel.selectDateRange(date)

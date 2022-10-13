@@ -7,30 +7,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.dramtar.billscollecting.R
 import com.dramtar.billscollecting.utils.getMonthYear
-import java.text.NumberFormat
 
 @Composable
 fun AppBar(
     onNavigationClick: () -> Unit,
-    totalSum: Int,
+    totalSum: String,
     onDateClick: () -> Unit,
     onChartsClick: () -> Unit,
     selectedRangeDate: Long
 ) {
-
-    val sumFormatted = remember {
-        mutableStateOf("")
-    }
-    sumFormatted.value = NumberFormat.getCurrencyInstance().format(totalSum)
     TopAppBar(
         title = {
             Box {
@@ -45,7 +38,7 @@ fun AppBar(
                 ) {
 
                     Text(
-                        text = "Total sum ${sumFormatted.value}",
+                        text = stringResource(id = R.string.total_sum_title, totalSum),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,

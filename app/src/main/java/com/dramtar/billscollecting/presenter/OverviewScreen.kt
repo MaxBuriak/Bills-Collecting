@@ -13,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.dramtar.billscollecting.R
 import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 
 @ExperimentalComposeUiApi
@@ -29,14 +31,17 @@ fun OverviewScreen(
         Surface {
             Column(modifier = Modifier.fillMaxSize()) {
                 Text(
-                    "Overview",
+                    text = stringResource(id = R.string.overview_title),
                     fontSize = 32.sp,
                     modifier = Modifier
                         .padding(16.dp)
                         .align(CenterHorizontally),
                 )
                 Text(
-                    "Total amount ${viewModel.billListState.formattedTotalSum}",
+                    text = stringResource(
+                        id = R.string.total_sum_title,
+                        viewModel.billListState.formattedTotalSum
+                    ),
                     fontSize = 28.sp,
                     modifier = Modifier
                         .padding(16.dp)
