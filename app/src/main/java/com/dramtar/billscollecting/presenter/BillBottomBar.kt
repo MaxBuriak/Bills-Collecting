@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.dramtar.billscollecting.R
 import com.dramtar.billscollecting.domain.BillTypeData
 import com.dramtar.billscollecting.utils.getDayMonthYear
 import kotlinx.coroutines.launch
@@ -100,7 +102,7 @@ fun BillBottomBar(
                     colors = TextFieldDefaults.textFieldColors(textColor = MaterialTheme.colorScheme.onSecondary),
                     label = {
                         Text(
-                            text = "Amount",
+                            text = stringResource(id = R.string.amount_hint),
                             color = MaterialTheme.colorScheme.onSecondary
                         )
                     },
@@ -228,7 +230,7 @@ fun BillBottomBar(
                     .clip(CircleShape)
             ) {
                 Text(
-                    text = "Add bill",
+                    text = stringResource(id = R.string.add_bill_button),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
