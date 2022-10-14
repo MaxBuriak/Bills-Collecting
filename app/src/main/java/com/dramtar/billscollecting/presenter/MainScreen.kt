@@ -36,19 +36,9 @@ fun MainScreen(
     viewModel: MainViewModel
 ) {
     val calendarShowing = remember { mutableStateOf(false) }
-    val sheetState = rememberBottomSheetState(
-        initialValue = BottomSheetValue.Collapsed
-    )
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = sheetState,
-    )
+    val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
     val scope = rememberCoroutineScope()
-    val calendar = Calendar.getInstance()
-    calendar.set(Calendar.YEAR, 2010)
-    calendar.set(Calendar.MONTH, 6)
-    val calendarMax = Calendar.getInstance()
-    calendarMax.set(Calendar.YEAR, 2032)
-    calendarMax.set(Calendar.MONTH, 9)
     BillsCollectingTheme {
         Surface {
             Scaffold(topBar = {
@@ -120,9 +110,7 @@ fun MainScreen(
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
-                            ComposeCalendar(minDate = calendar.time,
-                                maxDate = calendarMax.time,
-                                locale = Locale("en"),
+                            ComposeCalendar(
                                 initialDate = viewModel.billListState.selectedDateRange,
                                 title = stringResource(id = R.string.select_date_title),
                                 listener = object : SelectDateListener {
@@ -130,7 +118,6 @@ fun MainScreen(
                                         viewModel.selectDateRange(date)
                                         calendarShowing.value = false
                                     }
-
                                     override fun onCanceled() {
                                         calendarShowing.value = false
                                     }

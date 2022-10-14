@@ -133,8 +133,7 @@ fun BillBottomBar(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(
-                    modifier = Modifier
-                        .clickable { mDatePickerDialog.show() },
+                    modifier = Modifier.clickable { mDatePickerDialog.show() },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -151,7 +150,6 @@ fun BillBottomBar(
                     )
                 }
             }
-
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 state = scrollState,
