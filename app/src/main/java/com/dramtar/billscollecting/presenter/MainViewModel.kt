@@ -28,8 +28,6 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     var billListState by mutableStateOf(BillsState())
         private set
-    var colorState by mutableStateOf(Color(0))
-        private set
     private var billsJob: Job? = null
 
     private val updatingEvent = Channel<String>()
