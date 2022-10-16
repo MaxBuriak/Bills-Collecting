@@ -28,8 +28,6 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     var billListState by mutableStateOf(BillsState())
         private set
-    var colorState by mutableStateOf(Color(0))
-        private set
     private var billsJob: Job? = null
 
     private val updatingEvent = Channel<String>()
@@ -43,7 +41,6 @@ class MainViewModel @Inject constructor(
     private fun overviewData() {
         billListState.bills?.let { bills ->
             val groupedBills = bills.groupBy { it.billTypeData }
-
             val listOfSum = groupedBills.mapValues { it.value.sumOf { it.amount } }.map {
                 val percentage = (it.value / (billListState.totalSum)).toFloat()
                 BillTypeGrouped(
@@ -54,11 +51,9 @@ class MainViewModel @Inject constructor(
                     formattedPercentage = percentage.getFormattedPercentage()
                 )
             }
-
             billListState = billListState.copy(
                 overviewTypesList = listOfSum.sortedByDescending { it.percentage }
             )
-            //toList().sortedByDescending { it.second }.toMap()
         }
     }
 
@@ -111,9 +106,7 @@ class MainViewModel @Inject constructor(
 
     fun onBillDeleteButtonClicked(data: BillData) {
         data.id?.let { id ->
-            viewModelScope.launch {
-                repository.deleteBill(id)
-            }
+            viewModelScope.launch { repository.deleteBill(id) }
         }
     }
 
@@ -131,12 +124,12 @@ class MainViewModel @Inject constructor(
         billListState.billTypes.apply {
             if (this.isEmpty()) return
             billListState = billListState.copy(
-                selectedBillTypeId = this[0].id
+                selectedBillTypeId = this.first().id
             )
         }
     }
 
-    fun getBillTypes() {
+    private fun getBillTypes() {
         viewModelScope.launch {
             repository.getBillTypes().cancellable().collectLatest { typesList ->
                 billListState = billListState.copy(
@@ -151,7 +144,7 @@ class MainViewModel @Inject constructor(
         repository.updateBillType(billTypeData.copy(priority = billTypeData.priority.inc()))
     }
 
-    fun getBills(start: Long, end: Long) {
+    private fun getBills(start: Long, end: Long) {
         billsJob?.cancel()
         billsJob = viewModelScope.launch {
             repository.getBills(start = start, end = end).collectLatest { billsList ->
@@ -171,7 +164,7 @@ class MainViewModel @Inject constructor(
         billListState = billListState.copy(selectedBillTypeId = id)
     }
 
-    fun addBillType() {
+    private fun addBillType() {
         billListState.tmpBillType?.let { billType ->
             viewModelScope.launch {
                 val type = billType.copy(
@@ -203,9 +196,8 @@ class MainViewModel @Inject constructor(
                 amount = amount
             )
             repository.saveBill(billData = bill)
-            val billTypeData =
-                billListState.billTypes.find { it.id == billListState.selectedBillTypeId }
-            billTypeData?.let {
+            val type = billListState.billTypes.find { it.id == billListState.selectedBillTypeId }
+            type?.let {
                 increaseBillTypePriority(it)
             }
         }
