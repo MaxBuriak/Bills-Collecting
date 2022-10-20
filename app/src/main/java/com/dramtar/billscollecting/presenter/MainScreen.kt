@@ -21,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dramtar.billscollecting.R
+import com.dramtar.billscollecting.presenter.bill.BillEvent
+import com.dramtar.billscollecting.presenter.billType.BillTypeEvent
 import com.dramtar.billscollecting.presenter.composedatepicker.ComposeCalendar
 import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 import com.dt.composedatepicker.SelectDateListener
@@ -63,9 +65,11 @@ fun MainScreen(
                             BillBottomBar(
                                 billsState = viewModel.billListState,
                                 onAddBillButtonCLick = { amount, date ->
-                                    viewModel.addBill(
-                                        amount = amount,
-                                        date = date
+                                    viewModel.onBillEvent(
+                                        BillEvent.AddBill(
+                                            amount = amount,
+                                            date = date
+                                        )
                                     )
                                     scope.launch {
                                         if (sheetState.isExpanded) {
@@ -73,16 +77,22 @@ fun MainScreen(
                                         }
                                     }
                                 },
-                                onBillTypeSelected = { id -> viewModel.billTypeSelected(id) },
+                                onBillTypeSelected = { id ->
+                                    viewModel.onBillTypeEvent(
+                                        BillTypeEvent.BillTypeSelected(
+                                            id = id
+                                        )
+                                    )
+                                },
                                 onAddBillTypeClick = {
-                                    viewModel.onAddBillTypeButtonClick()
+                                    viewModel.onBillTypeEvent(BillTypeEvent.AddBillType)
                                     /*scope.launch {
                                     if (sheetState.isCollapsed) sheetState.expand() else sheetState.collapse()
                                 }*/
                                 },
                                 tmpBillType = viewModel.billListState.tmpBillType,
                                 onCompleteBillTypeClick = { name ->
-                                    viewModel.onCompleteBillTypeButtonClick(name)
+                                    viewModel.onBillTypeEvent(BillTypeEvent.CompleteBillType(name = name))
                                 },
                                 onAmountClicked = {
                                     scope.launch {
@@ -91,7 +101,9 @@ fun MainScreen(
                                         }
                                     }
                                 },
-                                onBillTypeDelete = { viewModel.onBillTypeDeleteButtonClicked(it) }
+                                onBillTypeDelete = {
+                                    viewModel.onBillTypeEvent(BillTypeEvent.BillTypeDeleted(data = it))
+                                }
                             )
                         }
                     },
@@ -115,7 +127,7 @@ fun MainScreen(
                                 title = stringResource(id = R.string.select_date_title),
                                 listener = object : SelectDateListener {
                                     override fun onDateSelected(date: Date) {
-                                        viewModel.selectDateRange(date)
+                                        viewModel.onUiEvent(UIEvent.SelectDateRange(date = date))
                                         calendarShowing.value = false
                                     }
                                     override fun onCanceled() {
@@ -147,7 +159,7 @@ fun MainScreen(
                                                 data = collection,
                                                 onItemClick = {},
                                                 onDeleteButtonClick = { data ->
-                                                    viewModel.onBillDeleteButtonClicked(data)
+                                                    viewModel.onBillEvent(BillEvent.DeleteBill(data))
                                                 }
                                             )
                                         }
