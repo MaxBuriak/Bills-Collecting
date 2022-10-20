@@ -41,6 +41,7 @@ fun AmountChartItem(
                 .weight(.3F),
             progress = progress,
             color = data.color,
+            trackColor = data.invertedColor
         )
         Text(
             text = formattedPercentage,

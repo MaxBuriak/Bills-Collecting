@@ -34,12 +34,12 @@ fun DateStickyHeader(
                 .clip(
                     RoundedCornerShape(10.dp)
                 )
-                .background(MaterialTheme.colorScheme.tertiary)
+                .background(MaterialTheme.colorScheme.secondary)
                 .align(Alignment.Center)
         ) {
             Text(
                 formattedDate,
-                color = MaterialTheme.colorScheme.onTertiary,
+                color = MaterialTheme.colorScheme.onSecondary,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
