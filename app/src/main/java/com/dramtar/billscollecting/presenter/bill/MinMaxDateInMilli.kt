@@ -1,4 +1,4 @@
-package com.dramtar.billscollecting.presenter
+package com.dramtar.billscollecting.presenter.bill
 
 data class MinMaxDateInMilli(
     val min: Long,
