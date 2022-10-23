@@ -4,9 +4,6 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * Created by Dramtar on 16.08.2022
- */
 private const val TIME_STAMP_FORMAT = "EEEE, MMMM d, yyyy - hh:mm:ss a"
 private const val DATE_YEAR_MONTH_DAY_FORMAT = "yyyy/MM/dd"
 private const val DATE_DAY_MONTH_YEAR_FORMAT = "dd/MM/yyyy"
