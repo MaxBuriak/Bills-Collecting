@@ -3,11 +3,11 @@ package com.dramtar.billscollecting.utils
 import androidx.compose.ui.graphics.Color
 import java.util.*
 
-fun Color.invertColor() = Color(
-    red = 1 - red,
-    green = 1 - green,
-    blue = 1 - blue
-)
+//fun Color.invertColor() = Color(
+//    red = 1 - red,
+//    green = 1 - green,
+//    blue = 1 - blue
+//)
 
 fun Color.getOnColor(): Color {
     return if (red > 0.3 && blue > 0.3 && green > 0.3) {
