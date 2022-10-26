@@ -91,8 +91,7 @@ fun BillItem(
                     imageVector = Icons.Default.Delete,
                     tint = Color.White,
                     contentDescription = "delete button",
-                    modifier = Modifier
-                    .size(16.dp)
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }
