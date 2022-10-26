@@ -13,8 +13,8 @@ data class BillsState(
     val formattedTotalSum: String = "",
     val isLoading: Boolean = false,
     val selectedBillTypeId: String = "",
-    var errorString: String? = null,
-    var selectedDateRange: Date = Calendar.getInstance().time,
-    var overviewTypesList: List<BillTypeGrouped>? = null,
-    var gropedByDateBillsList: Map<String, List<BillData>>? = null
+    val errorString: String? = null,
+    val selectedDateRange: Date = Calendar.getInstance().time,
+    val overviewTypesList: List<BillTypeGrouped>? = null,
+    val gropedByDateBillsList: Map<String, List<BillData>>? = null
 )
