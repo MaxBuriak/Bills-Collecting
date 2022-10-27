@@ -18,5 +18,5 @@ interface BillTypeDao {
     suspend fun updateBillType(billTypeEntity: BillTypeEntity)
 
     @Query("DELETE FROM bill_type_table WHERE id = :id")
-    suspend fun deleteBill(id: String)
+    suspend fun deleteBillType(id: String)
 }
