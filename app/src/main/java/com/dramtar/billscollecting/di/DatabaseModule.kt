@@ -32,7 +32,7 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDogDao(database: BillDatabase): BillTypeDao {
+    fun provideBillTypeDao(database: BillDatabase): BillTypeDao {
         return database.billTypeDao
     }
 }
