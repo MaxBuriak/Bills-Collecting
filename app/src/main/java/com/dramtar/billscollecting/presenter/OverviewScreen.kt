@@ -1,6 +1,7 @@
 package com.dramtar.billscollecting.presenter
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +26,8 @@ import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 @Composable
 fun OverviewScreen(
     navController: NavController,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    onExportCLicked: () -> Unit
 ) {
     BillsCollectingTheme {
         Surface {
@@ -37,6 +39,16 @@ fun OverviewScreen(
                         .padding(16.dp)
                         .align(CenterHorizontally),
                 )
+
+                Text(
+                    text = stringResource(id = R.string.export_title),
+                    fontSize = 32.sp,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(CenterHorizontally)
+                        .clickable { onExportCLicked() },
+                )
+
                 Text(
                     text = stringResource(
                         id = R.string.total_sum_title,
