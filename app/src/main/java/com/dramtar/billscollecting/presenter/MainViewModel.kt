@@ -203,16 +203,22 @@ class MainViewModel @Inject constructor(
         billListState = billListState.copy(tmpBillType = null)
     }
 
-
     private fun exportMoviesWithDirectorsToCSVFile(csvFile: File) {
         viewModelScope.launch {
             val billsList = billListState.bills
             csvWriter().open(csvFile, append = false) {
                 writeRow(listOf("", "Overview"))
-                writeRow(listOf("", "Type", "Date of payment", "Amount of payment"))
+                writeRow(listOf("Type", "Date of payment", "Amount of payment"))
                 billsList?.forEach { bill ->
-                    writeRow(listOf(bill.date.getDayMonthYear(), bill.billTypeData.name, bill.formattedAmount))
+                    writeRow(
+                        listOf(
+                            bill.billTypeData.name,
+                            bill.date.getDayMonthYear(),
+                            bill.formattedAmount
+                        )
+                    )
                 }
+                writeRow(listOf("", "Total sum", billListState.formattedTotalSum))
             }
             updatingEvent.send(UIUpdatingEvent.OpenCreatedCSV(csvFile))
         }

@@ -1,7 +1,6 @@
 package com.dramtar.billscollecting.presenter
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,10 +33,9 @@ class MainActivity : ComponentActivity() {
             viewModel.updatingEvents.collectLatest { event ->
                 when (event) {
                     is UIUpdatingEvent.OpenCreatedCSV -> {
-                        startActivity(event.file)
+                        startActivityWithCSVFile(event.file)
                     }
                 }
-
             }
         }
         setContent {
@@ -60,25 +58,21 @@ class MainActivity : ComponentActivity() {
         csvFile?.let { viewModel.onUiEvent(UIEvent.ExportToCSV(it)) }
     }
 
-    private fun startActivity(file: File) {
+    private fun startActivityWithCSVFile(file: File) {
         Toast.makeText(
             this,
             "File created and start opening",
             Toast.LENGTH_LONG
         ).show()
         val intent = FileUtils.goToFileIntent(this, file)
-        Log.i("TEST", file.name)
+        if (this.packageManager.resolveActivity(intent, 0) == null) {
             startActivity(intent)
         }
+    }
 }
 
 @Preview
 @Composable
 fun MainPreview() {
-    BillsCollectingTheme {
-        /*Scaffold(topBar = { AppBar(onNavigationClick = { }) }) {
-            it
-            //Content()
-        }*/
-    }
+    BillsCollectingTheme {}
 }
