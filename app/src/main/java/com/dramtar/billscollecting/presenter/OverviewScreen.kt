@@ -42,9 +42,9 @@ fun OverviewScreen(
 
                 Text(
                     text = stringResource(id = R.string.export_title),
-                    fontSize = 32.sp,
+                    fontSize = 28.sp,
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(12.dp)
                         .align(CenterHorizontally)
                         .clickable { onExportCLicked() },
                 )
