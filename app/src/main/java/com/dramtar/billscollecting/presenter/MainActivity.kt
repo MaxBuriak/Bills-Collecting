@@ -59,15 +59,21 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun startActivityWithCSVFile(file: File) {
-        Toast.makeText(
-            this,
-            "File created and start opening",
-            Toast.LENGTH_LONG
-        ).show()
         val intent = FileUtils.goToFileIntent(this, file)
-        if (this.packageManager.resolveActivity(intent, 0) == null) {
+        //if (this.packageManager.resolveActivity(intent, 0) == null) {
             startActivity(intent)
-        }
+        /*    Toast.makeText(
+                this,
+                "File created and start opening",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            Toast.makeText(
+                this,
+                "Something goes wrong",
+                Toast.LENGTH_LONG
+            ).show()
+        }*/
     }
 }
 
