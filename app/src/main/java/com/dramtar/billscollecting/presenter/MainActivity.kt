@@ -1,7 +1,6 @@
 package com.dramtar.billscollecting.presenter
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -54,14 +53,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun exportDatabaseToCSVFile() {
-        val csvFile = FileUtils.generateFile(this)
+        val csvFile = FileUtils.generateFile(context = this, fileName = viewModel.getCSVFileName())
         csvFile?.let { viewModel.onUiEvent(UIEvent.ExportToCSV(it)) }
     }
 
     private fun startActivityWithCSVFile(file: File) {
         val intent = FileUtils.goToFileIntent(this, file)
         //if (this.packageManager.resolveActivity(intent, 0) == null) {
-            startActivity(intent)
+        startActivity(intent)
         /*    Toast.makeText(
                 this,
                 "File created and start opening",
