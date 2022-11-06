@@ -27,7 +27,6 @@ class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         lifecycleScope.launchWhenStarted {
             viewModel.updatingEvents.collectLatest { event ->
                 when (event) {
