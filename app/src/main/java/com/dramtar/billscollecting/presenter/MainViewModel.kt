@@ -14,6 +14,7 @@ import com.dramtar.billscollecting.presenter.bill.BillEvent
 import com.dramtar.billscollecting.presenter.bill.MinMaxDateInMilli
 import com.dramtar.billscollecting.presenter.billType.BillTypeEvent
 import com.dramtar.billscollecting.utils.*
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -33,7 +35,7 @@ class MainViewModel @Inject constructor(
         private set
     private var billsJob: Job? = null
 
-    private val updatingEvent = Channel<String>()
+    private val updatingEvent = Channel<UIUpdatingEvent>()
     val updatingEvents = updatingEvent.receiveAsFlow()
 
     init {
@@ -110,8 +112,11 @@ class MainViewModel @Inject constructor(
                 billListState = billListState.copy(selectedDateRange = event.date)
                 getBills()
             }
+            is UIEvent.ExportToCSV -> exportMoviesWithDirectorsToCSVFile(event.file)
         }
     }
+
+    fun getCSVFileName(): String = "${billListState.bills?.get(0)?.date?.getMonthYear()} Overview"
 
     private fun overviewData() {
         billListState.bills?.let { bills ->
@@ -198,5 +203,27 @@ class MainViewModel @Inject constructor(
 
     private fun clearTmpBillType() {
         billListState = billListState.copy(tmpBillType = null)
+    }
+
+    private fun exportMoviesWithDirectorsToCSVFile(csvFile: File) {
+        viewModelScope.launch {
+            val overviewBillsList = billListState.overviewTypesList
+            val formattedDate = billListState.bills?.get(0)?.date?.getMonthYear()
+            csvWriter().open(csvFile, append = false) {
+                writeRow(listOf("", "Overview of $formattedDate"))
+                writeRow(listOf("Type", "Amount of payments", "Percentage"))
+                overviewBillsList?.forEach { bill ->
+                    writeRow(
+                        listOf(
+                            bill.type.name,
+                            bill.formattedSumAmount,
+                            bill.formattedPercentage
+                        )
+                    )
+                }
+                writeRow(listOf("Total sum", billListState.formattedTotalSum))
+            }
+            updatingEvent.send(UIUpdatingEvent.OpenCreatedCSV(csvFile))
+        }
     }
 }
