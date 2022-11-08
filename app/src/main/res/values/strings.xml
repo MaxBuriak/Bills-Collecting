@@ -6,4 +6,5 @@
     <string name="select_date_title">Select Date</string>
     <string name="overview_title">Overview</string>
     <string name="export_title">Export</string>
+    <string name="types_title">Types</string>
 </resources>
