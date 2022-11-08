@@ -150,6 +150,21 @@ fun BillBottomBar(
                     )
                 }
             }
+
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = stringResource(id = R.string.types_title),
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    modifier = Modifier.padding(start = 16.dp, bottom = 6.dp)
+                )
+                Divider(
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    thickness = 1.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                )
+            }
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 state = scrollState,
@@ -246,7 +261,11 @@ fun BillBottomBar(
 fun BottomBarPreview() {
     BillBottomBar(
         billsState = BillsState(
-            billTypes = listOf(BillTypeData(), BillTypeData(), BillTypeData())
+            billTypes = listOf(
+                BillTypeData(id = "1"),
+                BillTypeData(id = "2"),
+                BillTypeData(id = "3")
+            )
         ),
         onAddBillTypeClick = {},
         onBillTypeSelected = {},
