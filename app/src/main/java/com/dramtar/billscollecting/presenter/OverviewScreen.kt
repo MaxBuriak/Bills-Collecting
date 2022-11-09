@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +42,13 @@ fun OverviewScreen(
                         .align(CenterHorizontally),
                 )
 
+                Divider(
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    thickness = 1.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                )
                 Text(
                     text = stringResource(id = R.string.export_title),
                     fontSize = 28.sp,
@@ -47,6 +56,13 @@ fun OverviewScreen(
                         .padding(12.dp)
                         .align(CenterHorizontally)
                         .clickable { onExportCLicked() },
+                )
+                Divider(
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    thickness = 1.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
                 )
 
                 Text(
