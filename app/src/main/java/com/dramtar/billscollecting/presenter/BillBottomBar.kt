@@ -210,7 +210,7 @@ fun BillBottomBar(
                         modifier = Modifier
                             .clip(CircleShape)
                             .background(color = Color.White)
-                            .size(65.dp)
+                            .size(73.dp)
                             .clickable {
                                 tmpBillType?.let {
                                     onCompleteBillTypeClick(billTypeName.value)
@@ -226,7 +226,14 @@ fun BillBottomBar(
                     Spacer(modifier = Modifier.width(16.dp))
                 }
             }
-            Spacer(modifier = Modifier.height(18.dp))
+            Divider(
+                color = MaterialTheme.colorScheme.onSecondary,
+                thickness = 1.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
                     onAddBillButtonCLick(
