@@ -170,8 +170,8 @@ fun BillBottomBar(
                 state = scrollState,
                 contentPadding = PaddingValues(
                     start = 16.dp,
-                    top = 12.dp,
-                    bottom = 12.dp
+                    top = 3.dp,
+                    bottom = 3.dp
                 ),
                 horizontalArrangement = Arrangement.spacedBy(1.dp)
             ) {
@@ -210,7 +210,8 @@ fun BillBottomBar(
                         modifier = Modifier
                             .clip(CircleShape)
                             .background(color = Color.White)
-                            .size(73.dp)
+                            .size(63.dp)
+                            .padding(10.dp)
                             .clickable {
                                 tmpBillType?.let {
                                     onCompleteBillTypeClick(billTypeName.value)
