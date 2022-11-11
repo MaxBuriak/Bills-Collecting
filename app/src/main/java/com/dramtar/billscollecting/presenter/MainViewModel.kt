@@ -116,7 +116,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getCSVFileName(): String = "${billListState.bills?.get(0)?.date?.getMonthYear()} Overview"
+    fun getCSVFileName(): String = "${billListState.bills?.get(0)?.date?.getMonthYear()} Overview.csv"
 
     private fun overviewData() {
         billListState.bills?.let { bills ->

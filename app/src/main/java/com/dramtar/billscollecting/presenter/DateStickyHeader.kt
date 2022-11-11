@@ -23,16 +23,16 @@ fun DateStickyHeader(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                top = 16.dp,
+                top = 6.dp,
                 start = 8.dp,
-                end = 16.dp,
-                bottom = 8.dp
+                end = 8.dp,
+                bottom = 6.dp
             )
     ) {
         Box(
             modifier = Modifier
                 .clip(
-                    RoundedCornerShape(10.dp)
+                    RoundedCornerShape(20.dp)
                 )
                 .background(MaterialTheme.colorScheme.secondary)
                 .align(Alignment.Center)
@@ -40,11 +40,11 @@ fun DateStickyHeader(
             Text(
                 formattedDate,
                 color = MaterialTheme.colorScheme.onSecondary,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(6.dp)
+                    .padding(start = 6.dp, end = 6.dp)
             )
         }
     }
