@@ -6,3 +6,4 @@ import kotlin.math.roundToInt
 fun Double.formatCurrency(): String = NumberFormat.getCurrencyInstance().format(this)
 fun Float.getFormattedPercentage(): String = "${(this * 100).roundToInt()}%"
 fun Int.getFormattedLocalCurrency(): String = NumberFormat.getCurrencyInstance().format(this)
+fun Double.getFormattedLocalCurrency(): String = NumberFormat.getCurrencyInstance().format(this)

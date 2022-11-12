@@ -189,7 +189,7 @@ class MainViewModel @Inject constructor(
         billsJob = viewModelScope.launch {
             repository.getBills(start = minMax.min, end = minMax.max)
                 .collectLatest { billsList ->
-                    val sum = billsList.sumOf { it.amount }.roundToInt()
+                    val sum = billsList.sumOf { it.amount }
                     billListState = billListState.copy(
                         bills = billsList,
                         totalSum = sum,
