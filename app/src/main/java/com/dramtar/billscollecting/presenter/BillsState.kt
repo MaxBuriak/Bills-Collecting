@@ -9,7 +9,7 @@ data class BillsState(
     val bills: List<BillData>? = null,
     val billTypes: List<BillTypeData> = listOf(),
     val tmpBillType: BillTypeData? = null,
-    val totalSum: Int = 0,
+    val totalSum: Double = 0.0,
     val formattedTotalSum: String = "",
     val isLoading: Boolean = false,
     val selectedBillTypeId: String = "",
