@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -112,7 +111,7 @@ class MainViewModel @Inject constructor(
                 billListState = billListState.copy(selectedDateRange = event.date)
                 getBills()
             }
-            is UIEvent.ExportToCSV -> exportMoviesWithDirectorsToCSVFile(event.file)
+            is UIEvent.ExportToCSV -> exportBillsOverviewToCSVFile(event.file)
         }
     }
 
@@ -141,7 +140,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getGroupedByDateBillsList() {
+    private suspend fun getGroupedByDateBillsList() {
         billListState =
             billListState.copy(gropedByDateBillsList = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
     }
@@ -205,7 +204,7 @@ class MainViewModel @Inject constructor(
         billListState = billListState.copy(tmpBillType = null)
     }
 
-    private fun exportMoviesWithDirectorsToCSVFile(csvFile: File) {
+    private fun exportBillsOverviewToCSVFile(csvFile: File) {
         viewModelScope.launch {
             val overviewBillsList = billListState.overviewTypesList
             val formattedDate = billListState.bills?.get(0)?.date?.getMonthYear()
