@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.core.content.FileProvider
 import java.io.File
 object FileUtils {
-    fun generateFile(context: Context, fileName: String = "azaza.csv"): File? {
+    fun generateFile(context: Context, fileName: String = "dummy.csv"): File? {
         val csvFile = File(context.filesDir, fileName)
         csvFile.createNewFile()
 
