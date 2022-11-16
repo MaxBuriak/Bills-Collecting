@@ -44,7 +44,7 @@ class MainViewModel @Inject constructor(
 
     fun onBillEvent(event: BillEvent) {
         when (event) {
-            is BillEvent.AddBill -> {
+            is BillEvent.Add -> {
                 viewModelScope.launch {
                     val bill = BillData(
                         date = event.date,
@@ -57,7 +57,7 @@ class MainViewModel @Inject constructor(
                     type?.let { increaseBillTypePriority(it) }
                 }
             }
-            is BillEvent.DeleteBill -> {
+            is BillEvent.Delete -> {
                 event.data.id?.let { id -> viewModelScope.launch { repository.deleteBill(id) } }
             }
         }

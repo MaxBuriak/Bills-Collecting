@@ -66,7 +66,7 @@ fun MainScreen(
                                 billsState = viewModel.billListState,
                                 onAddBillButtonCLick = { amount, date ->
                                     viewModel.onBillEvent(
-                                        BillEvent.AddBill(
+                                        BillEvent.Add(
                                             amount = amount,
                                             date = date
                                         )
@@ -159,7 +159,7 @@ fun MainScreen(
                                                 data = collection,
                                                 onItemClick = {},
                                                 onDeleteButtonClick = { data ->
-                                                    viewModel.onBillEvent(BillEvent.DeleteBill(data))
+                                                    viewModel.onBillEvent(BillEvent.Delete(data))
                                                 }
                                             )
                                         }
