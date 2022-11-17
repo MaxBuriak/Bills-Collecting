@@ -79,20 +79,20 @@ fun MainScreen(
                                 },
                                 onBillTypeSelected = { id ->
                                     viewModel.onBillTypeEvent(
-                                        BillTypeEvent.BillTypeSelected(
+                                        BillTypeEvent.Selected(
                                             id = id
                                         )
                                     )
                                 },
                                 onAddBillTypeClick = {
-                                    viewModel.onBillTypeEvent(BillTypeEvent.AddBillType)
+                                    viewModel.onBillTypeEvent(BillTypeEvent.Add)
                                     /*scope.launch {
                                     if (sheetState.isCollapsed) sheetState.expand() else sheetState.collapse()
                                 }*/
                                 },
                                 tmpBillType = viewModel.billListState.tmpBillType,
                                 onCompleteBillTypeClick = { name ->
-                                    viewModel.onBillTypeEvent(BillTypeEvent.CompleteBillType(name = name))
+                                    viewModel.onBillTypeEvent(BillTypeEvent.Complete(name = name))
                                 },
                                 onAmountClicked = {
                                     scope.launch {
@@ -102,7 +102,7 @@ fun MainScreen(
                                     }
                                 },
                                 onBillTypeDelete = {
-                                    viewModel.onBillTypeEvent(BillTypeEvent.BillTypeDeleted(data = it))
+                                    viewModel.onBillTypeEvent(BillTypeEvent.Deleted(data = it))
                                 }
                             )
                         }

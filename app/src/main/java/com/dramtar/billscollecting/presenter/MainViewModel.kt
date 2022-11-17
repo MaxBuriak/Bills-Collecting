@@ -65,7 +65,7 @@ class MainViewModel @Inject constructor(
 
     fun onBillTypeEvent(event: BillTypeEvent) {
         when (event) {
-            BillTypeEvent.AddBillType -> {
+            BillTypeEvent.Add -> {
                 val newRndColor = Color.getRndColor()
                 billListState = billListState.copy(
                     tmpBillType = BillTypeData(
@@ -75,7 +75,7 @@ class MainViewModel @Inject constructor(
                     )
                 )
             }
-            is BillTypeEvent.BillTypeDeleted -> {
+            is BillTypeEvent.Deleted -> {
                 viewModelScope.launch {
                     repository.deleteBillType(event.data.id)
                     if (billListState.selectedBillTypeId == event.data.id) {
@@ -83,9 +83,9 @@ class MainViewModel @Inject constructor(
                     }
                 }
             }
-            is BillTypeEvent.BillTypeSelected -> billListState =
+            is BillTypeEvent.Selected -> billListState =
                 billListState.copy(selectedBillTypeId = event.id)
-            is BillTypeEvent.CompleteBillType -> {
+            is BillTypeEvent.Complete -> {
                 if (event.name.isBlank()) {
                     clearTmpBillType()
                     return
@@ -97,7 +97,7 @@ class MainViewModel @Inject constructor(
                             name = event.name,
                         )
                         repository.saveBillType(type)
-                        onBillTypeEvent(BillTypeEvent.BillTypeSelected(id = type.id))
+                        onBillTypeEvent(BillTypeEvent.Selected(id = type.id))
                         clearTmpBillType()
                     }
                 }
