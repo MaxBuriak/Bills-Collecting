@@ -66,7 +66,7 @@ fun MainScreen(
                                 billsState = viewModel.billListState,
                                 onAddBillButtonCLick = { amount, date ->
                                     viewModel.onBillEvent(
-                                        BillEvent.AddBill(
+                                        BillEvent.Add(
                                             amount = amount,
                                             date = date
                                         )
@@ -79,20 +79,20 @@ fun MainScreen(
                                 },
                                 onBillTypeSelected = { id ->
                                     viewModel.onBillTypeEvent(
-                                        BillTypeEvent.BillTypeSelected(
+                                        BillTypeEvent.Selected(
                                             id = id
                                         )
                                     )
                                 },
                                 onAddBillTypeClick = {
-                                    viewModel.onBillTypeEvent(BillTypeEvent.AddBillType)
+                                    viewModel.onBillTypeEvent(BillTypeEvent.Add)
                                     /*scope.launch {
                                     if (sheetState.isCollapsed) sheetState.expand() else sheetState.collapse()
                                 }*/
                                 },
                                 tmpBillType = viewModel.billListState.tmpBillType,
                                 onCompleteBillTypeClick = { name ->
-                                    viewModel.onBillTypeEvent(BillTypeEvent.CompleteBillType(name = name))
+                                    viewModel.onBillTypeEvent(BillTypeEvent.Complete(name = name))
                                 },
                                 onAmountClicked = {
                                     scope.launch {
@@ -102,7 +102,7 @@ fun MainScreen(
                                     }
                                 },
                                 onBillTypeDelete = {
-                                    viewModel.onBillTypeEvent(BillTypeEvent.BillTypeDeleted(data = it))
+                                    viewModel.onBillTypeEvent(BillTypeEvent.Deleted(data = it))
                                 }
                             )
                         }
@@ -159,7 +159,7 @@ fun MainScreen(
                                                 data = collection,
                                                 onItemClick = {},
                                                 onDeleteButtonClick = { data ->
-                                                    viewModel.onBillEvent(BillEvent.DeleteBill(data))
+                                                    viewModel.onBillEvent(BillEvent.Delete(data))
                                                 }
                                             )
                                         }

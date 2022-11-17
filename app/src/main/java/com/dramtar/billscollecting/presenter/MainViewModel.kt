@@ -44,7 +44,7 @@ class MainViewModel @Inject constructor(
 
     fun onBillEvent(event: BillEvent) {
         when (event) {
-            is BillEvent.AddBill -> {
+            is BillEvent.Add -> {
                 viewModelScope.launch {
                     val bill = BillData(
                         date = event.date,
@@ -57,7 +57,7 @@ class MainViewModel @Inject constructor(
                     type?.let { increaseBillTypePriority(it) }
                 }
             }
-            is BillEvent.DeleteBill -> {
+            is BillEvent.Delete -> {
                 event.data.id?.let { id -> viewModelScope.launch { repository.deleteBill(id) } }
             }
         }
@@ -65,7 +65,7 @@ class MainViewModel @Inject constructor(
 
     fun onBillTypeEvent(event: BillTypeEvent) {
         when (event) {
-            BillTypeEvent.AddBillType -> {
+            BillTypeEvent.Add -> {
                 val newRndColor = Color.getRndColor()
                 billListState = billListState.copy(
                     tmpBillType = BillTypeData(
@@ -75,7 +75,7 @@ class MainViewModel @Inject constructor(
                     )
                 )
             }
-            is BillTypeEvent.BillTypeDeleted -> {
+            is BillTypeEvent.Deleted -> {
                 viewModelScope.launch {
                     repository.deleteBillType(event.data.id)
                     if (billListState.selectedBillTypeId == event.data.id) {
@@ -83,9 +83,9 @@ class MainViewModel @Inject constructor(
                     }
                 }
             }
-            is BillTypeEvent.BillTypeSelected -> billListState =
+            is BillTypeEvent.Selected -> billListState =
                 billListState.copy(selectedBillTypeId = event.id)
-            is BillTypeEvent.CompleteBillType -> {
+            is BillTypeEvent.Complete -> {
                 if (event.name.isBlank()) {
                     clearTmpBillType()
                     return
@@ -97,7 +97,7 @@ class MainViewModel @Inject constructor(
                             name = event.name,
                         )
                         repository.saveBillType(type)
-                        onBillTypeEvent(BillTypeEvent.BillTypeSelected(id = type.id))
+                        onBillTypeEvent(BillTypeEvent.Selected(id = type.id))
                         clearTmpBillType()
                     }
                 }
