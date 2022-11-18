@@ -55,7 +55,7 @@ fun MainScreen(
                 scaffoldPAdding
                 BottomSheetScaffold(
                     scaffoldState = scaffoldState,
-                    sheetPeekHeight = 100.dp,
+                    sheetPeekHeight = 95.dp,
                     sheetContent = {
                         Surface(
                             color = MaterialTheme.colorScheme.secondary,
