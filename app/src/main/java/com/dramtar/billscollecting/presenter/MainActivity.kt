@@ -1,5 +1,6 @@
 package com.dramtar.billscollecting.presenter
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.dramtar.billscollecting.R
 import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 import com.dramtar.billscollecting.utils.FileUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,7 +46,8 @@ class MainActivity : ComponentActivity() {
                     OverviewScreen(
                         navController,
                         viewModel = viewModel,
-                        onExportCLicked = { exportDatabaseToCSVFile() })
+                        onExportCLicked = { exportDatabaseToCSVFile() },
+                        onTestClick = { playSound() })
                 }
             }
         }
@@ -54,6 +57,11 @@ class MainActivity : ComponentActivity() {
     private fun exportDatabaseToCSVFile() {
         val csvFile = FileUtils.generateFile(context = this, fileName = viewModel.getCSVFileName())
         csvFile?.let { viewModel.onUiEvent(UIEvent.ExportToCSV(it)) }
+    }
+
+    private fun playSound() {
+        val mediaPlayer = MediaPlayer.create(this, R.raw.type_in)
+        mediaPlayer.start()
     }
 
     private fun startActivityWithCSVFile(file: File) {
