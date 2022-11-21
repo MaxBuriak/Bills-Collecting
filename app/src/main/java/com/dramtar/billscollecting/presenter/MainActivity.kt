@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
                     is UIUpdatingEvent.OpenCreatedCSV -> {
                         startActivityWithCSVFile(event.file)
                     }
+                    UIUpdatingEvent.AddBillTypeClicked -> { playSound() }
                 }
             }
         }

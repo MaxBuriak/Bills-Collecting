@@ -55,6 +55,7 @@ class MainViewModel @Inject constructor(
                     val type =
                         billListState.billTypes.find { it.id == billListState.selectedBillTypeId }
                     type?.let { increaseBillTypePriority(it) }
+                    updatingEvent.send(UIUpdatingEvent.AddBillTypeClicked)
                 }
             }
             is BillEvent.Delete -> {

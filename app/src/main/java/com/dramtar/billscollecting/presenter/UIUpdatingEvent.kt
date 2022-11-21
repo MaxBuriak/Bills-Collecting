@@ -4,4 +4,5 @@ import java.io.File
 
 sealed class UIUpdatingEvent {
     data class OpenCreatedCSV(val file: File): UIUpdatingEvent()
+    object AddBillTypeClicked: UIUpdatingEvent()
 }
