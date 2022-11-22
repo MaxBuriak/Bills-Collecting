@@ -61,8 +61,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun playSound() {
-        val mediaPlayer = MediaPlayer.create(this, R.raw.type_in)
-        mediaPlayer.start()
+        MediaPlayer.create(this, R.raw.type_in).start()
     }
 
     private fun startActivityWithCSVFile(file: File) {
