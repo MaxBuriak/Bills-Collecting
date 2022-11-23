@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                     is UIUpdatingEvent.OpenCreatedCSV -> {
                         startActivityWithCSVFile(event.file)
                     }
-                    UIUpdatingEvent.AddBillTypeClicked -> { playSound() }
+                    UIUpdatingEvent.AddBillTypeClicked -> { playAddBillSound() }
                 }
             }
         }
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                         navController,
                         viewModel = viewModel,
                         onExportCLicked = { exportDatabaseToCSVFile() },
-                        onTestClick = { playSound() })
+                        onTestClick = { playAddBillSound() })
                 }
             }
         }
@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
         csvFile?.let { viewModel.onUiEvent(UIEvent.ExportToCSV(it)) }
     }
 
-    private fun playSound() {
+    private fun playAddBillSound() {
         MediaPlayer.create(this, R.raw.type_in).start()
     }
 
