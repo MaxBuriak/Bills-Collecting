@@ -1,7 +1,10 @@
 package com.dramtar.billscollecting.presenter
 
+import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -62,6 +65,8 @@ class MainActivity : ComponentActivity() {
 
     private fun playAddBillSound() {
         MediaPlayer.create(this, R.raw.type_in).start()
+        val vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 
     private fun startActivityWithCSVFile(file: File) {
