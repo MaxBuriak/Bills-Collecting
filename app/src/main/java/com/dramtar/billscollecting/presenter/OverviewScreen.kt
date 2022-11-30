@@ -29,7 +29,8 @@ import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 fun OverviewScreen(
     navController: NavController,
     viewModel: MainViewModel,
-    onExportCLicked: () -> Unit
+    onExportCLicked: () -> Unit,
+    onTestClick: () -> Unit
 ) {
     BillsCollectingTheme {
         Surface {
@@ -39,7 +40,8 @@ fun OverviewScreen(
                     fontSize = 32.sp,
                     modifier = Modifier
                         .padding(16.dp)
-                        .align(CenterHorizontally),
+                        .align(CenterHorizontally)
+                        .clickable { onTestClick() },
                 )
 
                 Divider(
