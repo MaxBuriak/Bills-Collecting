@@ -1,6 +1,10 @@
 package com.dramtar.billscollecting.presenter
 
+import android.content.Context
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -13,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.dramtar.billscollecting.R
 import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 import com.dramtar.billscollecting.utils.FileUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +38,7 @@ class MainActivity : ComponentActivity() {
                     is UIUpdatingEvent.OpenCreatedCSV -> {
                         startActivityWithCSVFile(event.file)
                     }
+                    UIUpdatingEvent.AddBillTypeClicked -> { playAddBillSound() }
                 }
             }
         }
@@ -44,7 +50,8 @@ class MainActivity : ComponentActivity() {
                     OverviewScreen(
                         navController,
                         viewModel = viewModel,
-                        onExportCLicked = { exportDatabaseToCSVFile() })
+                        onExportCLicked = { exportDatabaseToCSVFile() },
+                        onTestClick = { playAddBillSound() })
                 }
             }
         }
@@ -54,6 +61,12 @@ class MainActivity : ComponentActivity() {
     private fun exportDatabaseToCSVFile() {
         val csvFile = FileUtils.generateFile(context = this, fileName = viewModel.getCSVFileName())
         csvFile?.let { viewModel.onUiEvent(UIEvent.ExportToCSV(it)) }
+    }
+
+    private fun playAddBillSound() {
+        MediaPlayer.create(this, R.raw.type_in).start()
+        val vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 
     private fun startActivityWithCSVFile(file: File) {
