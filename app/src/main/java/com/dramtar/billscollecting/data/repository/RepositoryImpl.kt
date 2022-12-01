@@ -35,6 +35,16 @@ class RepositoryImpl @Inject constructor(
         localDataSource.deleteBill(id)
     }
 
+    override suspend fun getAllBills(): List<BillData> {
+        return localDataSource.getAllBill().map { billEntity ->
+            billEntity.mapToBillData(
+                billTypeData = getBillTypeById(
+                    billEntity.billTypeId ?: ""
+                )
+            )
+        }
+    }
+
     override suspend fun getBillTypes(): Flow<List<BillTypeData>> {
         return localDataSource.getBillTypes().map { list ->
             list.map { it.mapToBillTypeData() }
