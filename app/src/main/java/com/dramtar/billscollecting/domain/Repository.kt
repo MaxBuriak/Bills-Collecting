@@ -6,6 +6,7 @@ interface Repository {
     suspend fun getBills(start: Long, end: Long): Flow<List<BillData>>
     suspend fun saveBill(billData: BillData)
     suspend fun deleteBill(id: Int)
+    suspend fun getAllBills(): List<BillData>
 
     suspend fun getBillTypes(): Flow<List<BillTypeData>>
     suspend fun saveBillType(billTypeData: BillTypeData)

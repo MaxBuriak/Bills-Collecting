@@ -16,5 +16,6 @@ data class BillsState(
     val errorString: String? = null,
     val selectedDateRange: Date = Calendar.getInstance().time,
     val overviewTypesList: List<BillTypeGrouped>? = null,
+    val overviewAllBillsTypesList: List<BillTypeGrouped>? = null,
     val gropedByDateBillsList: Map<String, List<BillData>>? = null
 )

@@ -113,37 +113,40 @@ class MainViewModel @Inject constructor(
                 getBills()
             }
             is UIEvent.ExportToCSV -> exportBillsOverviewToCSVFile(event.file)
+            is UIEvent.ShowAllBillsOverview -> getAllBillsOverviewData()
         }
     }
 
-    fun getCSVFileName(): String = "${billListState.bills?.get(0)?.date?.getMonthYear()} Bills overview.csv"
+    fun getCSVFileName(): String =
+        "${billListState.bills?.get(0)?.date?.getMonthYear()} Bills overview.csv"
 
-    private fun overviewData() {
-        billListState.bills?.let { bills ->
-            val groupedBills = bills.groupBy { it.billTypeData }
-            val listOfSum = groupedBills.mapValues {
-                it.value.sumOf { billData ->
-                    billData.amount
-                }
-            }.map {
-                val percentage = (it.value / (billListState.totalSum)).toFloat()
-                BillTypeGrouped(
-                    type = it.key,
-                    sumAmount = it.value,
-                    formattedSumAmount = it.value.formatCurrency(),
-                    percentage = percentage,
-                    formattedPercentage = percentage.getFormattedPercentage()
-                )
+    private fun overviewData(bills: List<BillData>): List<BillTypeGrouped> {
+        val groupedBills = bills.groupBy { it.billTypeData }
+        val listOfSum = groupedBills.mapValues {
+            it.value.sumOf { billData ->
+                billData.amount
             }
-            billListState = billListState.copy(
-                overviewTypesList = listOfSum.sortedByDescending { it.percentage }
+        }.map {
+            val percentage = (it.value / (billListState.totalSum)).toFloat()
+            BillTypeGrouped(
+                type = it.key,
+                sumAmount = it.value,
+                formattedSumAmount = it.value.formatCurrency(),
+                percentage = percentage,
+                formattedPercentage = percentage.getFormattedPercentage()
             )
+        }
+        return listOfSum.sortedByDescending { it.percentage }
+    }
+
+    private fun getAllBillsOverviewData() {
+        viewModelScope.launch {
+            billListState = billListState.copy(overviewAllBillsTypesList = overviewData(repository.getAllBills()))
         }
     }
 
     private suspend fun getGroupedByDateBillsList() {
-        billListState =
-            billListState.copy(gropedByDateBillsList = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
+        billListState = billListState.copy(gropedByDateBillsList = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
     }
 
     private fun getMinMaxDate(): MinMaxDateInMilli {
@@ -195,7 +198,11 @@ class MainViewModel @Inject constructor(
                         totalSum = sum,
                         formattedTotalSum = sum.getFormattedLocalCurrency()
                     )
-                    overviewData()
+                    billListState.bills?.let { bills ->
+                        billListState = billListState.copy(
+                            overviewTypesList = overviewData(bills)
+                        )
+                    }
                     getGroupedByDateBillsList()
                 }
         }

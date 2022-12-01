@@ -11,9 +11,12 @@ interface BillDao {
     @Insert(onConflict = REPLACE)
     suspend fun saveBill(vararg billEntity: BillEntity)
 
-    @Query("SELECT * FROM bill_table WHERE timestamp > :start AND timestamp < :end ORDER BY timestamp DESC ")
+    @Query("SELECT * FROM bill_table WHERE timestamp > :start AND timestamp < :end ORDER BY timestamp DESC")
     fun getBills(start: Long, end: Long): Flow<List<BillEntity>>
 
     @Query("DELETE FROM bill_table WHERE id = :id")
     suspend fun deleteBill(id: Int)
+
+    @Query("SELECT * FROM bill_table ORDER BY timestamp DESC ")
+    suspend fun getAllBills(): List<BillEntity>
 }
