@@ -78,7 +78,7 @@ fun OverviewScreen(
                         .align(CenterHorizontally),
                 )
 
-                viewModel.billListState.overviewTypesList?.let { list ->
+                viewModel.billListState.overviewTypes?.let { list ->
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
