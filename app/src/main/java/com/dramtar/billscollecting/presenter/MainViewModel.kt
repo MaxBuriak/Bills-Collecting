@@ -146,7 +146,7 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun getGroupedByDateBillsList() {
-        billListState = billListState.copy(gropedByDateBillsList = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
+        billListState = billListState.copy(gropedByDateBills = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
     }
 
     private fun getMinMaxDate(): MinMaxDateInMilli {

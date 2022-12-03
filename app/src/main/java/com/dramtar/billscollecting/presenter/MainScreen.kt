@@ -148,7 +148,7 @@ fun MainScreen(
                                     .weight(1F),
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                viewModel.billListState.gropedByDateBillsList?.let { list ->
+                                viewModel.billListState.gropedByDateBills?.let { list ->
                                     list.forEach { (date, collectionsInAccount) ->
                                         stickyHeader { DateStickyHeader(formattedDate = date) }
                                         items(
