@@ -200,7 +200,7 @@ class MainViewModel @Inject constructor(
                     )
                     billListState.bills?.let { bills ->
                         billListState = billListState.copy(
-                            overviewBillsTypes = overviewData(bills)
+                            gropedTypesBills = overviewData(bills)
                         )
                     }
                     getGroupedByDateBillsList()
@@ -214,7 +214,7 @@ class MainViewModel @Inject constructor(
 
     private fun exportBillsOverviewToCSVFile(csvFile: File) {
         viewModelScope.launch {
-            val overviewBillsList = billListState.overviewBillsTypes
+            val overviewBillsList = billListState.gropedTypesBills
             val formattedDate = billListState.bills?.get(0)?.date?.getMonthYear()
             csvWriter().open(csvFile, append = false) {
                 writeRow(listOf("", "Overview of $formattedDate"))
