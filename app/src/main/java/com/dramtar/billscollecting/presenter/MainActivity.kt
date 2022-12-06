@@ -65,8 +65,6 @@ class MainActivity : ComponentActivity() {
 
     private fun playAddBillSound() {
         MediaPlayer.create(this, R.raw.type_in).start()
-        val vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 
     private fun startActivityWithCSVFile(file: File) {
