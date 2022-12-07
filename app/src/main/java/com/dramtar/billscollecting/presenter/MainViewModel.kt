@@ -196,7 +196,7 @@ class MainViewModel @Inject constructor(
                     billListState = billListState.copy(
                         bills = billsList,
                         totalSum = sum,
-                        formattedTotalSum = sum.getFormattedLocalCurrency()
+                        formattedTotalSum = sum.getFtdLocalCur()
                     )
                     billListState.bills?.let { bills ->
                         billListState = billListState.copy(
