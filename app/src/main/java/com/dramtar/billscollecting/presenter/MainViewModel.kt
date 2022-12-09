@@ -131,7 +131,7 @@ class MainViewModel @Inject constructor(
             BillTypeGrouped(
                 type = it.key,
                 sumAmount = it.value,
-                formattedSumAmount = it.value.formatCurrency(),
+                formattedSumAmount = it.value.getFormattedLocalCurrency(),
                 percentage = percentage,
                 formattedPercentage = percentage.getFormattedPercentage()
             )
