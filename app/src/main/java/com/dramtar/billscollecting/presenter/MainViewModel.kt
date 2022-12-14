@@ -113,14 +113,15 @@ class MainViewModel @Inject constructor(
                 getBills()
             }
             is UIEvent.ExportToCSV -> exportBillsOverviewToCSVFile(event.file)
-            is UIEvent.ShowAllBillsOverview -> getAllBillsOverviewData()
+            is UIEvent.ShowAllBillsOverviewData -> getAllBillsOverviewData()
+            is UIEvent.ShowCurrentMonthBillsOverviewData -> getCurrentMonthBillsOverviewData()
         }
     }
 
     fun getCSVFileName(): String =
         "${billListState.bills?.get(0)?.date?.getMonthYear()} Bills overview.csv"
 
-    private fun overviewData(bills: List<BillData>): List<BillTypeGrouped> {
+    private fun overviewData(bills: List<BillData>): OverviewData {
         val groupedBills = bills.groupBy { it.billTypeData }
         val listOfSum = groupedBills.mapValues {
             it.value.sumOf { billData ->
@@ -136,17 +137,33 @@ class MainViewModel @Inject constructor(
                 formattedPercentage = percentage.fmtPercentage()
             )
         }
-        return listOfSum.sortedByDescending { it.percentage }
+        return OverviewData(
+            formattedTotalSum = bills.sumOf { it.amount }.fmtLocalCurrency(),
+            gropedByTypesBills = listOfSum.sortedByDescending { it.percentage })
     }
 
     private fun getAllBillsOverviewData() {
         viewModelScope.launch {
-            billListState = billListState.copy(overviewAllBillsTypes = overviewData(repository.getAllBills()))
+            billListState =
+                billListState.copy(overviewData = overviewData(repository.getAllBills()))
+            updatingEvent.send(UIUpdatingEvent.NavigateToOverview)
+        }
+    }
+
+    private fun getCurrentMonthBillsOverviewData() {
+        viewModelScope.launch {
+            billListState.bills?.let { bills ->
+                billListState = billListState.copy(
+                    overviewData = overviewData(bills)
+                )
+                updatingEvent.send(UIUpdatingEvent.NavigateToOverview)
+            }
         }
     }
 
     private suspend fun getGroupedByDateBillsList() {
-        billListState = billListState.copy(gropedByDateBills = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
+        billListState =
+            billListState.copy(gropedByDateBills = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
     }
 
     private fun getMinMaxDate(): MinMaxDateInMilli {
@@ -198,11 +215,6 @@ class MainViewModel @Inject constructor(
                         totalSum = sum,
                         formattedTotalSum = sum.getFMTLocalCur()
                     )
-                    billListState.bills?.let { bills ->
-                        billListState = billListState.copy(
-                            gropedTypesBills = overviewData(bills)
-                        )
-                    }
                     getGroupedByDateBillsList()
                 }
         }
@@ -214,7 +226,7 @@ class MainViewModel @Inject constructor(
 
     private fun exportBillsOverviewToCSVFile(csvFile: File) {
         viewModelScope.launch {
-            val overviewBillsList = billListState.gropedTypesBills
+            val overviewBillsList = billListState.overviewData?.gropedByTypesBills
             val formattedDate = billListState.bills?.get(0)?.date?.getMonthYear()
             csvWriter().open(csvFile, append = false) {
                 writeRow(listOf("", "Overview of $formattedDate"))
@@ -228,7 +240,7 @@ class MainViewModel @Inject constructor(
                         )
                     )
                 }
-                writeRow(listOf("Total sum", billListState.formattedTotalSum))
+                writeRow(listOf("Total sum", billListState.overviewData?.formattedTotalSum))
             }
             updatingEvent.send(UIUpdatingEvent.OpenCreatedCSV(csvFile))
         }

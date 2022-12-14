@@ -70,7 +70,7 @@ fun OverviewScreen(
                 Text(
                     text = stringResource(
                         id = R.string.total_sum_title,
-                        viewModel.billListState.formattedTotalSum
+                        viewModel.billListState.overviewData?.formattedTotalSum ?: 0
                     ),
                     fontSize = 28.sp,
                     modifier = Modifier
@@ -78,7 +78,7 @@ fun OverviewScreen(
                         .align(CenterHorizontally),
                 )
 
-                viewModel.billListState.gropedTypesBills?.let { list ->
+                viewModel.billListState.overviewData?.gropedByTypesBills?.let { list ->
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dramtar.billscollecting.R
 import com.dramtar.billscollecting.utils.getMonthYear
@@ -22,15 +24,26 @@ fun AppBar(
     totalSum: String,
     onDateClick: () -> Unit,
     onChartsClick: () -> Unit,
+    onRedChartsClick: () -> Unit,
     selectedRangeDate: Long
 ) {
     TopAppBar(
         title = {
             Box {
+                Button(
+                    onClick = onRedChartsClick,
+                    modifier = Modifier.align(Alignment.CenterStart),
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_bar_chart),
+                        contentDescription = "charts"
+                    )
+                }
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.CenterStart)
+                        .align(Alignment.Center).padding(start = 55.dp, end = 55.dp)
                         .clickable {
                             onDateClick()
                         },
