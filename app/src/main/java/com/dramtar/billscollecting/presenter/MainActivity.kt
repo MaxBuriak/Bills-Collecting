@@ -1,10 +1,7 @@
 package com.dramtar.billscollecting.presenter
 
-import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -32,16 +29,6 @@ class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launchWhenStarted {
-            viewModel.updatingEvents.collectLatest { event ->
-                when (event) {
-                    is UIUpdatingEvent.OpenCreatedCSV -> {
-                        startActivityWithCSVFile(event.file)
-                    }
-                    UIUpdatingEvent.AddBillTypeClicked -> { playAddBillSound() }
-                }
-            }
-        }
         setContent {
             val navController = rememberNavController()
             NavHost(navController, startDestination = "main") {
@@ -52,6 +39,18 @@ class MainActivity : ComponentActivity() {
                         viewModel = viewModel,
                         onExportCLicked = { exportDatabaseToCSVFile() },
                         onTestClick = { playAddBillSound() })
+                }
+            }
+
+            lifecycleScope.launchWhenStarted {
+                viewModel.updatingEvents.collectLatest { event ->
+                    when (event) {
+                        is UIUpdatingEvent.OpenCreatedCSV -> {
+                            startActivityWithCSVFile(event.file)
+                        }
+                        is UIUpdatingEvent.AddBillTypeClicked -> playAddBillSound()
+                        is UIUpdatingEvent.NavigateToOverview -> navController.navigate("overview")
+                    }
                 }
             }
         }

@@ -49,7 +49,8 @@ fun MainScreen(
                     viewModel.billListState.formattedTotalSum,
                     onDateClick = { calendarShowing.value = true },
                     selectedRangeDate = viewModel.billListState.selectedDateRange.time,
-                    onChartsClick = { navController.navigate("overview") }
+                    onChartsClick = { viewModel.onUiEvent(UIEvent.ShowCurrentMonthBillsOverviewData) },
+                    onRedChartsClick = { viewModel.onUiEvent(UIEvent.ShowAllBillsOverviewData) }
                 )
             }) { scaffoldPAdding ->
                 scaffoldPAdding

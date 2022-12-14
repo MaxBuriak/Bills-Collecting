@@ -6,5 +6,6 @@ import java.util.*
 sealed class UIEvent {
     data class SelectDateRange(val date: Date): UIEvent()
     data class ExportToCSV(val file: File): UIEvent()
-    object ShowAllBillsOverview : UIEvent()
+    object ShowCurrentMonthBillsOverviewData : UIEvent()
+    object ShowAllBillsOverviewData : UIEvent()
 }
