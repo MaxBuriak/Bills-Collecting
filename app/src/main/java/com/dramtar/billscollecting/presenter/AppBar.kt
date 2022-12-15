@@ -35,8 +35,8 @@ fun AppBar(
                     modifier = Modifier.align(Alignment.CenterStart),
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_bar_chart),
-                        contentDescription = "charts"
+                        painter = painterResource(id = R.drawable.ic_chart_outlined),
+                        contentDescription = "All charts"
                     )
                 }
 

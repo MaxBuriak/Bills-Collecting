@@ -123,12 +123,13 @@ class MainViewModel @Inject constructor(
 
     private fun overviewData(bills: List<BillData>): OverviewData {
         val groupedBills = bills.groupBy { it.billTypeData }
+        val totalSum = bills.sumOf { it.amount }
         val listOfSum = groupedBills.mapValues {
             it.value.sumOf { billData ->
                 billData.amount
             }
         }.map {
-            val percentage = (it.value / (billListState.totalSum)).toFloat()
+            val percentage = (it.value / (totalSum)).toFloat()
             BillTypeGrouped(
                 type = it.key,
                 sumAmount = it.value,
@@ -137,8 +138,14 @@ class MainViewModel @Inject constructor(
                 formattedPercentage = percentage.fmtPercentage()
             )
         }
+
+        val startDate = bills.first().date.getMonthYear()
+        val endDate = bills.last().date.getMonthYear()
+        val fmtPeriodOfTime = if (startDate == endDate) startDate else "$endDate - $startDate"
+
         return OverviewData(
-            formattedTotalSum = bills.sumOf { it.amount }.fmtLocalCurrency(),
+            fmtPeriodOfTime = fmtPeriodOfTime,
+            formattedTotalSum = totalSum.fmtLocalCurrency(),
             gropedByTypesBills = listOfSum.sortedByDescending { it.percentage })
     }
 
@@ -227,9 +234,9 @@ class MainViewModel @Inject constructor(
     private fun exportBillsOverviewToCSVFile(csvFile: File) {
         viewModelScope.launch {
             val overviewBillsList = billListState.overviewData?.gropedByTypesBills
-            val formattedDate = billListState.bills?.get(0)?.date?.getMonthYear()
+            val formattedDate = billListState.overviewData?.fmtPeriodOfTime
             csvWriter().open(csvFile, append = false) {
-                writeRow(listOf("", "Overview of $formattedDate"))
+                writeRow(listOf("", "Overview for $formattedDate"))
                 writeRow(listOf("Type", "Amount of payments", "Percentage"))
                 overviewBillsList?.forEach { bill ->
                     writeRow(
