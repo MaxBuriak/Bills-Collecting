@@ -145,7 +145,7 @@ class MainViewModel @Inject constructor(
 
         return OverviewData(
             fmtPeriodOfTime = fmtPeriodOfTime,
-            formattedTotalSum = totalSum.fmtLocalCurrency(),
+            fmtTotalSum = totalSum.fmtLocalCurrency(),
             gropedByTypesBills = listOfSum.sortedByDescending { it.percentage })
     }
 
@@ -247,7 +247,7 @@ class MainViewModel @Inject constructor(
                         )
                     )
                 }
-                writeRow(listOf("Total sum", billListState.overviewData?.formattedTotalSum))
+                writeRow(listOf("Total sum", billListState.overviewData?.fmtTotalSum))
             }
             updatingEvent.send(UIUpdatingEvent.OpenCreatedCSV(csvFile))
         }
