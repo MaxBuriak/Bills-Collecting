@@ -119,7 +119,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun getCSVFileName(): String =
-        "${billListState.bills?.get(0)?.date?.getMonthYear()} Bills overview.csv"
+        "${billListState.overviewData?.fmtPeriodOfTime} Bills overview.csv"
 
     private fun overviewData(bills: List<BillData>): OverviewData {
         val groupedBills = bills.groupBy { it.billTypeData }
