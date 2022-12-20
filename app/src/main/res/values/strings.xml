@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">Bills Collecting</string>
-    <string name="total_sum_title">Total sum %s</string>
+    <string name="total_sum_placeholder">Total sum %s</string>
     <string name="amount_hint">Amount</string>
     <string name="add_bill_button">Add bill</string>
     <string name="select_date_title">Select Date</string>
     <string name="overview_title">Overview</string>
     <string name="export_title">Export</string>
     <string name="types_title">Types</string>
+    <string name="curr_month_title">Current month</string>
+    <string name="percent_placeholder">%s%</string>
+    <string name="total_sum_title">Total sum</string>
 </resources>

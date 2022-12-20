@@ -115,6 +115,7 @@ class MainViewModel @Inject constructor(
             is UIEvent.ExportToCSV -> exportBillsOverviewToCSVFile(event.file)
             is UIEvent.ShowAllBillsOverviewData -> getAllBillsOverviewData()
             is UIEvent.ShowCurrentMonthBillsOverviewData -> getCurrentMonthBillsOverviewData()
+            is UIEvent.ShowTypeOverview -> TODO()
         }
     }
 
@@ -167,9 +168,29 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getGroupedByDateBillsList() {
+    private suspend fun getGroupedByDayBillsList() {
         billListState =
             billListState.copy(gropedByDateBills = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
+    }
+
+    private suspend fun getGroupedByMonthBillsList(list: List<BillData>): Map<String, Pair<Double, String>> {
+        return list.groupBy { it.date.getMonthYear() }.mapValues {
+            val sum = it.value.sumOf { bill -> bill.amount }
+            Pair(sum, sum.fmtLocalCurrency())
+        }
+    }
+
+    private fun getTypeOverview(type: BillTypeData) {
+        viewModelScope.launch {
+            val map = getGroupedByMonthBillsList(repository.getAllBillsByTypeID(type))
+            val totalSum = map.entries.sumOf { it.value.first }
+            var data = TypeOverviewData(
+                type = type,
+                gropedByDate = map,
+                sumTotal = totalSum,
+                fmtSumTotal = totalSum.fmtLocalCurrency()
+            )
+        }
     }
 
     private fun getMinMaxDate(): MinMaxDateInMilli {
@@ -221,7 +242,7 @@ class MainViewModel @Inject constructor(
                         totalSum = sum,
                         formattedTotalSum = sum.getFMTLocalCur()
                     )
-                    getGroupedByDateBillsList()
+                    getGroupedByDayBillsList()
                 }
         }
     }

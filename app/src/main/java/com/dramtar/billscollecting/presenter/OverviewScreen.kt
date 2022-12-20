@@ -69,7 +69,7 @@ fun OverviewScreen(
 
                 Text(
                     text = stringResource(
-                        id = R.string.total_sum_title,
+                        id = R.string.total_sum_placeholder,
                         viewModel.billListState.overviewData?.fmtTotalSum ?: 0
                     ),
                     fontSize = 28.sp,

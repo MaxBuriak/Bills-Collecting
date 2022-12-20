@@ -17,6 +17,9 @@ interface BillDao {
     @Query("DELETE FROM bill_table WHERE id = :id")
     suspend fun deleteBill(id: Int)
 
-    @Query("SELECT * FROM bill_table ORDER BY timestamp DESC ")
+    @Query("SELECT * FROM bill_table ORDER BY timestamp DESC")
     suspend fun getAllBills(): List<BillEntity>
+
+    @Query("SELECT * FROM bill_table WHERE billTypeId = :typeID ORDER BY timestamp DESC")
+    suspend fun getAllBillsByTypeID(typeID: String): List<BillEntity>
 }
