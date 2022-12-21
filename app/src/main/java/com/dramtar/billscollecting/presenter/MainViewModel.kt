@@ -184,9 +184,10 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val map = getGroupedByMonthBillsList(repository.getAllBillsByTypeID(type))
             val totalSum = map.entries.sumOf { it.value.first }
+
             var data = TypeOverviewData(
                 type = type,
-                gropedByDate = map,
+                gpdByDate = map,
                 sumTotal = totalSum,
                 fmtSumTotal = totalSum.fmtLocalCurrency()
             )
