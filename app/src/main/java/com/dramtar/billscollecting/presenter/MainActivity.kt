@@ -9,6 +9,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
@@ -40,6 +41,12 @@ class MainActivity : ComponentActivity() {
                         onExportCLicked = { exportDatabaseToCSVFile() },
                         onTestClick = { playAddBillSound() })
                 }
+                composable("type_overview") {
+                    TypeOverviewScreen(
+                        navController = navController,
+                        modifier = Modifier,
+                        typeOverviewData = viewModel.billListState.typeOverviewData)
+                }
             }
 
             lifecycleScope.launchWhenStarted {
@@ -50,6 +57,7 @@ class MainActivity : ComponentActivity() {
                         }
                         is UIUpdatingEvent.AddBillTypeClicked -> playAddBillSound()
                         is UIUpdatingEvent.NavigateToOverview -> navController.navigate("overview")
+                        is UIUpdatingEvent.NavigateToTypeOverview -> navController.navigate("type_overview")
                     }
                 }
             }

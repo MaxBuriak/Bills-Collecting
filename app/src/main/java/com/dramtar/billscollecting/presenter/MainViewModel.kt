@@ -115,7 +115,7 @@ class MainViewModel @Inject constructor(
             is UIEvent.ExportToCSV -> exportBillsOverviewToCSVFile(event.file)
             is UIEvent.ShowAllBillsOverviewData -> getAllBillsOverviewData()
             is UIEvent.ShowCurrentMonthBillsOverviewData -> getCurrentMonthBillsOverviewData()
-            is UIEvent.ShowTypeOverview -> TODO()
+            is UIEvent.ShowTypeOverview -> getTypeOverview(event.type)
         }
     }
 
@@ -184,13 +184,29 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val map = getGroupedByMonthBillsList(repository.getAllBillsByTypeID(type))
             val totalSum = map.entries.sumOf { it.value.first }
+            var currMonthSum = 0.0
+            var currMonthsPercentage = 0F
 
-            var data = TypeOverviewData(
+            billListState.bills?.let { bills ->
+                val typeGrp = overviewData(bills).gropedByTypesBills?.find { it.type.id == type.id}
+                typeGrp?.let {
+                    currMonthSum = it.sumAmount
+                    currMonthsPercentage = it.percentage
+                }
+            }
+
+            val data = TypeOverviewData(
                 type = type,
                 gpdByDate = map,
                 sumTotal = totalSum,
-                fmtSumTotal = totalSum.fmtLocalCurrency()
+                fmtSumTotal = totalSum.fmtLocalCurrency(),
+                sumCurrMonth = currMonthSum,
+                fmtSumCurrAmount = currMonthSum.fmtLocalCurrency(),
+                currMonthPercentage = currMonthsPercentage,
+                fmtCurrMonthPercentage = currMonthsPercentage.fmtPercentage()
             )
+            billListState = billListState.copy(typeOverviewData = data)
+            updatingEvent.send(UIUpdatingEvent.NavigateToTypeOverview)
         }
     }
 
