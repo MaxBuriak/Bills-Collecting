@@ -28,7 +28,7 @@ import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 @Composable
 fun OverviewScreen(
     navController: NavController,
-    viewModel: MainViewModel,
+    overviewData: OverviewData?,
     onExportCLicked: () -> Unit,
     onTestClick: () -> Unit
 ) {
@@ -70,7 +70,7 @@ fun OverviewScreen(
                 Text(
                     text = stringResource(
                         id = R.string.total_sum_title,
-                        viewModel.billListState.overviewData?.fmtTotalSum ?: 0
+                        overviewData?.fmtTotalSum ?: 0
                     ),
                     fontSize = 28.sp,
                     modifier = Modifier
@@ -78,7 +78,7 @@ fun OverviewScreen(
                         .align(CenterHorizontally),
                 )
 
-                viewModel.billListState.overviewData?.gropedByTypesBills?.let { list ->
+                overviewData?.gropedByTypesBills?.let { list ->
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
