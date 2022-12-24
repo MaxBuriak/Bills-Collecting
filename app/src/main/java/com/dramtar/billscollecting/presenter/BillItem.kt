@@ -53,7 +53,6 @@ fun BillItem(
         ) {
             BillTypeItem(
                 data = data.billTypeData,
-                selectedBillTypeId = "",
                 onBillTypeSelected = {},
                 modifier = Modifier.weight(.5f),
                 onNameChanged = {},

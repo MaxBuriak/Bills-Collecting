@@ -78,10 +78,10 @@ fun MainScreen(
                                         }
                                     }
                                 },
-                                onBillTypeSelected = { id ->
+                                onBillTypeSelected = { data ->
                                     viewModel.onBillTypeEvent(
                                         BillTypeEvent.Selected(
-                                            id = id
+                                            data = data
                                         )
                                     )
                                 },

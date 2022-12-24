@@ -44,8 +44,8 @@ import com.dramtar.billscollecting.domain.BillTypeData
 fun BillTypeItem(
     data: BillTypeData,
     modifier: Modifier = Modifier,
-    selectedBillTypeId: String = "",
-    onBillTypeSelected: (id: String) -> Unit,
+    selectedBillType: BillTypeData = BillTypeData(),
+    onBillTypeSelected: (data: BillTypeData) -> Unit,
     onNameChanged: (name: String) -> Unit,
     onDeleteButtonClick: (BillTypeData) -> Unit
 ) {
@@ -66,12 +66,12 @@ fun BillTypeItem(
                 .fillMaxWidth()
                 .padding(vertical = 6.dp, horizontal = 3.dp)
                 .selectable(
-                    selected = selectedBillTypeId == data.id,
+                    selected = selectedBillType.id == data.id,
                     onClick = {},
                 )
                 .combinedClickable(
                     onClick = {
-                    if (!deleteButtonState.value) onBillTypeSelected(data.id)
+                    if (!deleteButtonState.value) onBillTypeSelected(data)
                     deleteButtonState.value = false
                 }, onLongClick = { deleteButtonState.value = true }
                 )
@@ -123,7 +123,7 @@ fun BillTypeItem(
                         .fillMaxWidth()
                 )
 
-                if (data.id == selectedBillTypeId) {
+                if (data.id == selectedBillType.id) {
                     Icon(
                         imageVector = Icons.Default.Check,
                         tint = data.invertedColor,
@@ -134,7 +134,7 @@ fun BillTypeItem(
                 }
             }
         }
-        if (deleteButtonState.value && selectedBillTypeId.isNotBlank()) {
+        if (deleteButtonState.value && selectedBillType.id != "deleted") { // TODO need to rework it
             Box(modifier = Modifier
                 .clip(CircleShape)
                 .background(Color.Red)
@@ -161,7 +161,7 @@ fun BillTypePreview() {
         name = "kekwwwwwwwwwwwww",
         id = "kekwwwwwwwwwwwww"
     ),
-        selectedBillTypeId = "kekwwwwwwwwwwwww",
+        selectedBillType = BillTypeData(),
         modifier = Modifier.height(73.dp),
         onBillTypeSelected = {},
         onNameChanged = {},

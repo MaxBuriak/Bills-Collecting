@@ -48,7 +48,7 @@ import java.util.*
 @Composable
 fun BillBottomBar(
     onAddBillButtonCLick: (amount: Double, date: Long) -> Unit,
-    onBillTypeSelected: (id: String) -> Unit,
+    onBillTypeSelected: (data: BillTypeData) -> Unit,
     onAddBillTypeClick: () -> Unit,
     onCompleteBillTypeClick: (name: String) -> Unit,
     billsState: BillsState,
@@ -181,7 +181,7 @@ fun BillBottomBar(
                 ) { billTypeData ->
                     BillTypeItem(
                         data = billTypeData,
-                        selectedBillTypeId = billsState.selectedBillTypeId,
+                        selectedBillType = billsState.selectedBillType,
                         onBillTypeSelected = onBillTypeSelected,
                         modifier = Modifier.height(73.dp),
                         onNameChanged = {},

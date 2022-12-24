@@ -48,12 +48,11 @@ class MainViewModel @Inject constructor(
                 viewModelScope.launch {
                     val bill = BillData(
                         date = event.date,
-                        billTypeData = BillTypeData(id = billListState.selectedBillTypeId),
+                        billTypeData = billListState.selectedBillType,
                         amount = event.amount
                     )
                     repository.saveBill(billData = bill)
-                    val type =
-                        billListState.billTypes.find { it.id == billListState.selectedBillTypeId }
+                    val type = billListState.billTypes.find { it.id == billListState.selectedBillType.id } // check if its necessary
                     type?.let { increaseBillTypePriority(it) }
                     updatingEvent.send(UIUpdatingEvent.AddBillTypeClicked)
                 }
@@ -79,13 +78,13 @@ class MainViewModel @Inject constructor(
             is BillTypeEvent.Deleted -> {
                 viewModelScope.launch {
                     repository.deleteBillType(event.data.id)
-                    if (billListState.selectedBillTypeId == event.data.id) {
-                        billListState = billListState.copy(selectedBillTypeId = "")
+                    if (billListState.selectedBillType.id == event.data.id) {
+                        billListState = billListState.copy(selectedBillType = BillTypeData())
                     }
                 }
             }
             is BillTypeEvent.Selected -> billListState =
-                billListState.copy(selectedBillTypeId = event.id)
+                billListState.copy(selectedBillType = event.data)
             is BillTypeEvent.Complete -> {
                 if (event.name.isBlank()) {
                     clearTmpBillType()
@@ -98,7 +97,7 @@ class MainViewModel @Inject constructor(
                             name = event.name,
                         )
                         repository.saveBillType(type)
-                        onBillTypeEvent(BillTypeEvent.Selected(id = type.id))
+                        onBillTypeEvent(BillTypeEvent.Selected(data = type))
                         clearTmpBillType()
                     }
                 }
@@ -185,12 +184,10 @@ class MainViewModel @Inject constructor(
     }
 
     private fun setFirstTypeSelected() {
-        if (billListState.selectedBillTypeId.isNotBlank()) return
+        if (billListState.selectedBillType.id != "deleted") return // TODO check to rework it
         billListState.billTypes.apply {
             if (this.isEmpty()) return
-            billListState = billListState.copy(
-                selectedBillTypeId = this.first().id
-            )
+            billListState = billListState.copy(selectedBillType = this.first())
         }
     }
 
