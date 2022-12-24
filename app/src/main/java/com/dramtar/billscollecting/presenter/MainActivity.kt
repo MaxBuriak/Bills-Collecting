@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                 composable("overview") {
                     OverviewScreen(
                         navController,
-                        viewModel = viewModel,
+                        overviewData = viewModel.billListState.overviewData,
                         onExportCLicked = { exportDatabaseToCSVFile() },
                         onTestClick = { playAddBillSound() })
                 }
