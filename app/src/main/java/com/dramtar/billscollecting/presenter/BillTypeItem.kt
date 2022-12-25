@@ -47,7 +47,8 @@ fun BillTypeItem(
     selectedBillType: BillTypeData = BillTypeData(),
     onBillTypeSelected: (data: BillTypeData) -> Unit,
     onNameChanged: (name: String) -> Unit,
-    onDeleteButtonClick: (BillTypeData) -> Unit
+    onDeleteButtonClick: (BillTypeData) -> Unit,
+    isOnTypeList: Boolean = false
 ) {
     val deleteButtonState = remember { mutableStateOf(false) }
     val nameInputValue = remember { mutableStateOf(TextFieldValue()) }
