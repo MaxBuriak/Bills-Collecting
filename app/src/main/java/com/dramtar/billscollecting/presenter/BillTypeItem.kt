@@ -44,11 +44,10 @@ import com.dramtar.billscollecting.domain.BillTypeData
 fun BillTypeItem(
     data: BillTypeData,
     modifier: Modifier = Modifier,
-    selectedBillType: BillTypeData = BillTypeData(),
+    selectedBillType: BillTypeData? = null,
     onBillTypeSelected: (data: BillTypeData) -> Unit,
     onNameChanged: (name: String) -> Unit,
     onDeleteButtonClick: (BillTypeData) -> Unit,
-    isOnTypeList: Boolean = false
 ) {
     val deleteButtonState = remember { mutableStateOf(false) }
     val nameInputValue = remember { mutableStateOf(TextFieldValue()) }
@@ -67,7 +66,7 @@ fun BillTypeItem(
                 .fillMaxWidth()
                 .padding(vertical = 6.dp, horizontal = 3.dp)
                 .selectable(
-                    selected = selectedBillType.id == data.id,
+                    selected = selectedBillType?.id == data.id,
                     onClick = {},
                 )
                 .combinedClickable(
@@ -124,7 +123,7 @@ fun BillTypeItem(
                         .fillMaxWidth()
                 )
 
-                if (data.id == selectedBillType.id) {
+                if (data.id == selectedBillType?.id) {
                     Icon(
                         imageVector = Icons.Default.Check,
                         tint = data.invertedColor,
@@ -135,7 +134,7 @@ fun BillTypeItem(
                 }
             }
         }
-        if (deleteButtonState.value && selectedBillType.id != "deleted") { // TODO need to rework it
+        if (deleteButtonState.value && selectedBillType != null) {
             Box(modifier = Modifier
                 .clip(CircleShape)
                 .background(Color.Red)

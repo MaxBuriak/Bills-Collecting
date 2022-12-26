@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.dramtar.billscollecting.R
+import com.dramtar.billscollecting.domain.BillTypeData
 import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 
 @ExperimentalComposeUiApi
@@ -30,7 +31,8 @@ fun OverviewScreen(
     navController: NavController,
     overviewData: OverviewData?,
     onExportCLicked: () -> Unit,
-    onTestClick: () -> Unit
+    onTestClick: () -> Unit,
+    onTypeClicked: (BillTypeData) -> Unit
 ) {
     BillsCollectingTheme {
         Surface {
@@ -89,7 +91,8 @@ fun OverviewScreen(
                                 data = chartItem.type,
                                 amount = chartItem.formattedSumAmount,
                                 progress = chartItem.percentage,
-                                formattedPercentage = chartItem.formattedPercentage
+                                formattedPercentage = chartItem.formattedPercentage,
+                                onTypeClicked = { onTypeClicked(it) }
                             )
                         }
                     }

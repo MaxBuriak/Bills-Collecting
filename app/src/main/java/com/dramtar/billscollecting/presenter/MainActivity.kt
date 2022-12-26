@@ -39,13 +39,15 @@ class MainActivity : ComponentActivity() {
                         navController,
                         overviewData = viewModel.billListState.overviewData,
                         onExportCLicked = { exportDatabaseToCSVFile() },
-                        onTestClick = { playAddBillSound() })
+                        onTestClick = { playAddBillSound() },
+                        onTypeClicked = { viewModel.onUiEvent(UIEvent.ShowTypeOverview(it)) })
                 }
                 composable("type_overview") {
                     TypeOverviewScreen(
                         navController = navController,
                         modifier = Modifier,
-                        typeOverviewData = viewModel.billListState.typeOverviewData)
+                        typeOverviewData = viewModel.billListState.typeOverviewData
+                    )
                 }
             }
 

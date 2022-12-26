@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dramtar.billscollecting.domain.BillData
+import com.dramtar.billscollecting.domain.BillTypeData
 import com.dramtar.billscollecting.utils.getHourMinute
 
 @ExperimentalFoundationApi
@@ -33,7 +34,8 @@ import com.dramtar.billscollecting.utils.getHourMinute
 fun BillItem(
     data: BillData,
     onItemClick: (BillData) -> Unit,
-    onDeleteButtonClick: (BillData) -> Unit
+    onDeleteButtonClick: (BillData) -> Unit,
+    onBillTypeClicked: (BillTypeData) -> Unit
 ) {
     val deleteButtonState = remember { mutableStateOf(false) }
 
@@ -53,7 +55,7 @@ fun BillItem(
         ) {
             BillTypeItem(
                 data = data.billTypeData,
-                onBillTypeSelected = {},
+                onBillTypeSelected = { onBillTypeClicked(it) },
                 modifier = Modifier.weight(.5f),
                 onNameChanged = {},
                 onDeleteButtonClick = {}
@@ -105,6 +107,7 @@ fun BillItemPreview() {
     BillItem(
         data = BillData(),
         onItemClick = {},
-        onDeleteButtonClick = {}
+        onDeleteButtonClick = {},
+        onBillTypeClicked = {}
     )
 }

@@ -8,6 +8,6 @@
     <string name="export_title">Export</string>
     <string name="types_title">Types</string>
     <string name="curr_month_title">Current month</string>
-    <string name="percent_placeholder">%s%</string>
+    <string name="percent_placeholder">%s</string>
     <string name="total_sum_title">Total sum</string>
 </resources>
