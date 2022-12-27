@@ -10,5 +10,6 @@ data class TypeOverviewData(
     val sumCurrMonth: Double = 0.0,
     val fmtSumCurrAmount: String = "",
     val currMonthPercentage: Float = 0F,
-    val fmtCurrMonthPercentage: String = ""
+    val fmtCurrMonthPercentage: String = "",
+    val fmtPeriodOfTime: String = ""
 )
