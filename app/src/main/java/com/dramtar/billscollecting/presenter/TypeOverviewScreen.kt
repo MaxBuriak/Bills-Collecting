@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,85 +35,87 @@ fun TypeOverviewScreen(
             0.2f to typeOverviewData.type.color,
             1f to typeOverviewData.type.invertedColor
         )
-        Surface {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(brush = gradientColor),
-                horizontalAlignment = Alignment.CenterHorizontally
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(brush = gradientColor),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(34.dp))
+            Text(
+                text = typeOverviewData.type.name,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = typeOverviewData.type.invertedColor
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+            Text(
+                text = typeOverviewData.fmtPeriodOfTime,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = typeOverviewData.type.invertedColor
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = typeOverviewData.fmtSumTotal,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center,
+                color = typeOverviewData.type.invertedColor
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = stringResource(id = R.string.curr_month_title),
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                color = typeOverviewData.type.invertedColor
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
             ) {
-                Spacer(modifier = Modifier.height(34.dp))
                 Text(
-                    text = typeOverviewData.type.name,
-                    fontSize = 30.sp,
+                    text = typeOverviewData.fmtSumCurrAmount,
+                    modifier = Modifier.weight(1F),
+                    fontSize = 26.sp,
+                    textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
                     color = typeOverviewData.type.invertedColor
                 )
-                Spacer(modifier = Modifier.height(14.dp))
                 Text(
-                    text = typeOverviewData.fmtPeriodOfTime,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    color = typeOverviewData.type.invertedColor
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = typeOverviewData.fmtSumTotal,
-                    fontSize = 24.sp,
-                    textAlign = TextAlign.Center,
-                    color = typeOverviewData.type.invertedColor
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = stringResource(id = R.string.curr_month_title),
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center,
-                    color = typeOverviewData.type.invertedColor
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
+                    text = stringResource(
+                        id = R.string.percent_placeholder,
+                        typeOverviewData.fmtCurrMonthPercentage
+                    ),
                     modifier = Modifier
-                        .fillMaxWidth(),
-                ) {
-                    Text(
-                        text = typeOverviewData.fmtSumCurrAmount,
-                        modifier = Modifier.weight(1F),
-                        fontSize = 26.sp,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold,
-                        color = typeOverviewData.type.invertedColor
-                    )
-                    Text(
-                        text = stringResource(
-                            id = R.string.percent_placeholder,
-                            typeOverviewData.fmtCurrMonthPercentage
-                        ),
-                        modifier = Modifier
-                            .weight(1F)
-                            .align(Alignment.CenterVertically),
-                        fontSize = 26.sp,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold,
-                        color = typeOverviewData.type.invertedColor
-                    )
-                }
-                Spacer(modifier = Modifier.height(20.dp))
-                Divider(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .padding(start = 16.dp, end = 16.dp))
-                Spacer(modifier = Modifier.height(6.dp))
-                LazyRow() {
-                    typeOverviewData.gpdByDate?.forEach {
-                        item {
-                            TypeOverviewChart(fmtDate = it.key, fmtSum = it.value.second)
-                        }
+                        .weight(1F)
+                        .align(Alignment.CenterVertically),
+                    fontSize = 26.sp,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    color = typeOverviewData.type.invertedColor
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Divider(
+                Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .padding(start = 16.dp, end = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            LazyRow(modifier = Modifier.height(200.dp)) {
+                typeOverviewData.gpdByDate?.forEach { chartData ->
+                    item {
+                        TypeOverviewChart(
+                            typeData = typeOverviewData,
+                            chartData = chartData
+                        )
                     }
-
                 }
+
             }
         }
     }

@@ -6,18 +6,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun TypeOverviewChart(
-    fmtDate: String,
-    fmtSum: String,
+    chartData: TypeChartData,
+    typeData: TypeOverviewData
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
-        Text(text = fmtSum)
+        VerticalProgress(
+            modifier = Modifier
+                .height(15.dp)
+                .weight(.3F)
+                .align(CenterHorizontally),
+            progress = chartData.percentage,
+            //color = typeData.type.color,
+            //trackColor = typeData.type.invertedColor
+        )
+        Text(text = chartData.formattedSum)
         Spacer(modifier = Modifier.height(6.dp))
-        Text(text = fmtDate)
+        Text(text = chartData.date)
     }
 
 }

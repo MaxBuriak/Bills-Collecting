@@ -172,27 +172,39 @@ class MainViewModel @Inject constructor(
             billListState.copy(gropedByDateBills = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
     }
 
-    private suspend fun getGroupedByMonthBillsList(list: List<BillData>): Map<String, Pair<Double, String>> {
-        return list.groupBy { it.date.getMonth() }.mapValues {
+    //TODO REWORK
+    private suspend fun getGroupedByMonthBillsList(list: List<BillData>): List<TypeChartData> {
+        val groupedBills = list.groupBy { it.date.getMonth() }
+        val maxSum =
+            groupedBills.entries.maxOf { groupedList -> groupedList.value.sumOf { bill -> bill.amount } }
+        return groupedBills.map {
             val sum = it.value.sumOf { bill -> bill.amount }
-            Pair(sum, sum.fmtLocalCurrency())
+            val percentage = (sum / maxSum).toFloat() * 100
+            TypeChartData(
+                date = it.key,
+                sum = sum,
+                formattedSum = sum.getFMTLocalCur(),
+                percentage = percentage,
+                formattedPercentage = percentage.fmtPercentage(),
+            )
         }
     }
 
     private fun getTypeOverview(type: BillTypeData) {
         viewModelScope.launch {
             val bills = repository.getAllBillsByTypeID(type)
-            val map = getGroupedByMonthBillsList(bills)
-            val totalSum = map.entries.sumOf { it.value.first }
+            val groupedList = getGroupedByMonthBillsList(bills)
+            val totalSum = bills.sumOf { it.amount }
             var currMonthSum = 0.0
             var currMonthsPercentage = 0F
 
             val startDate = bills.first().date.getMonthYear()
             val endDate = bills.last().date.getMonthYear()
             val fmtPeriodOfTime = if (startDate == endDate) startDate else "$endDate - $startDate"
+            val maxSum = bills.maxOf { it.amount }
 
             billListState.bills?.let { bills ->
-                val typeGrp = overviewData(bills).gropedByTypesBills?.find { it.type.id == type.id}
+                val typeGrp = overviewData(bills).gropedByTypesBills?.find { it.type.id == type.id }
                 typeGrp?.let {
                     currMonthSum = it.sumAmount
                     currMonthsPercentage = it.percentage
@@ -201,14 +213,15 @@ class MainViewModel @Inject constructor(
 
             val data = TypeOverviewData(
                 type = type,
-                gpdByDate = map,
+                gpdByDate = groupedList,
                 sumTotal = totalSum,
                 fmtSumTotal = totalSum.fmtLocalCurrency(),
                 sumCurrMonth = currMonthSum,
                 fmtSumCurrAmount = currMonthSum.fmtLocalCurrency(),
                 currMonthPercentage = currMonthsPercentage,
                 fmtCurrMonthPercentage = currMonthsPercentage.fmtPercentage(),
-                fmtPeriodOfTime = fmtPeriodOfTime
+                fmtPeriodOfTime = fmtPeriodOfTime,
+                maxSum = maxSum
             )
             billListState = billListState.copy(typeOverviewData = data)
             updatingEvent.send(UIUpdatingEvent.NavigateToTypeOverview)
