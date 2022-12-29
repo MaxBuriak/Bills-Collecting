@@ -106,16 +106,28 @@ fun TypeOverviewScreen(
                     .padding(start = 16.dp, end = 16.dp)
             )
             Spacer(modifier = Modifier.height(6.dp))
-            LazyRow(modifier = Modifier.height(200.dp)) {
-                typeOverviewData.gpdByDate?.forEach { chartData ->
-                    item {
-                        TypeOverviewChart(
-                            typeData = typeOverviewData,
-                            chartData = chartData
+            Row(modifier = Modifier.height(200.dp)) {
+                Column {
+                    Spacer(modifier = Modifier.weight(1F))
+                    typeOverviewData.separatorAmount.forEach {
+                        Text(
+                            text = it,
+                            modifier = Modifier.weight(1F)
                         )
                     }
                 }
+                Spacer(modifier = Modifier.width(8.dp))
+                LazyRow() {
+                    typeOverviewData.gpdByDate?.forEach { chartData ->
+                        item {
+                            TypeOverviewChart(
+                                typeData = typeOverviewData,
+                                chartData = chartData
+                            )
+                        }
+                    }
 
+                }
             }
         }
     }

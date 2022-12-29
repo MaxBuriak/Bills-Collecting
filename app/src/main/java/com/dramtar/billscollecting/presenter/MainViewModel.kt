@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.pow
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -203,8 +204,14 @@ class MainViewModel @Inject constructor(
             val fmtPeriodOfTime = if (startDate == endDate) startDate else "$endDate - $startDate"
             val maxSum = bills.maxOf { it.amount }
 
-            billListState.bills?.let { bills ->
-                val typeGrp = overviewData(bills).gropedByTypesBills?.find { it.type.id == type.id }
+            val length = maxSum.toInt().toString().length / 2 //TODO NEED TO OPTIMIZE
+            val multiplayer = 10.0.pow(length)
+            val a = (maxSum / 2.0) / multiplayer.toInt()
+
+            val separator = (a.toInt() * multiplayer)
+            billListState.bills?.let { currBills ->
+                val typeGrp =
+                    overviewData(currBills).gropedByTypesBills?.find { it.type.id == type.id }
                 typeGrp?.let {
                     currMonthSum = it.sumAmount
                     currMonthsPercentage = it.percentage
@@ -221,7 +228,12 @@ class MainViewModel @Inject constructor(
                 currMonthPercentage = currMonthsPercentage,
                 fmtCurrMonthPercentage = currMonthsPercentage.fmtPercentage(),
                 fmtPeriodOfTime = fmtPeriodOfTime,
-                maxSum = maxSum
+                maxSum = maxSum,
+                separatorAmount = listOf(
+                    (separator * 2).fmtLocalCurrency(),
+                    separator.fmtLocalCurrency(),
+                    (0).fmtLocalCurrency()
+                )
             )
             billListState = billListState.copy(typeOverviewData = data)
             updatingEvent.send(UIUpdatingEvent.NavigateToTypeOverview)
