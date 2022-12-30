@@ -17,7 +17,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun VerticalProgress(
     progress: Float,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    color: Color,
+    invertedColor: Color
 ) {
     val mProgress = animateFloatAsState(targetValue = progress / 100)
     Column(
@@ -37,14 +39,7 @@ fun VerticalProgress(
                 .weight(mProgress.value)
                 .fillMaxWidth()
                 .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            Color(0xffE000FF),
-                            Color(0xffE000FF),
-                            Color(0xFF7700FF),
-                            Color(0xFF7700FF),
-                        )
-                    )
+                    Brush.verticalGradient(listOf(invertedColor, color))
                 )
         )
     }
