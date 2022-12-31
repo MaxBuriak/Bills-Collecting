@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.Color.Companion.Yellow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -106,13 +107,16 @@ fun TypeOverviewScreen(
                     .padding(start = 16.dp, end = 16.dp)
             )
             Spacer(modifier = Modifier.height(6.dp))
-            Row(modifier = Modifier.height(200.dp)) {
-                Column {
+            Row(modifier = Modifier.height(250.dp), verticalAlignment = Alignment.Top) {
+                Column(verticalArrangement = Arrangement.Center) {
                     Spacer(modifier = Modifier.weight(1F))
                     typeOverviewData.separatorAmount.forEach {
                         Text(
                             text = it,
-                            modifier = Modifier.weight(1F)
+                            modifier = Modifier
+                                .weight(1F)
+                                .background(Yellow),
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
@@ -122,7 +126,8 @@ fun TypeOverviewScreen(
                         item {
                             TypeOverviewChart(
                                 typeData = typeOverviewData,
-                                chartData = chartData
+                                chartData = chartData,
+                                modifier = Modifier.height(250.dp)
                             )
                         }
                     }

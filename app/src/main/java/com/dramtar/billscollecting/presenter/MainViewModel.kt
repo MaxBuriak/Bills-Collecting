@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.ceil
 import kotlin.math.pow
 
 @HiltViewModel
@@ -208,7 +209,7 @@ class MainViewModel @Inject constructor(
             val multiplayer = 10.0.pow(length)
             val a = (maxSum / 2.0) / multiplayer.toInt()
 
-            val separator = (a.toInt() * multiplayer)
+            val separator = (ceil(a) * multiplayer)
             billListState.bills?.let { currBills ->
                 val typeGrp =
                     overviewData(currBills).gropedByTypesBills?.find { it.type.id == type.id }

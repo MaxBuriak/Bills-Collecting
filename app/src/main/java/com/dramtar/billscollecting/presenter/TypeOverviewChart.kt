@@ -13,19 +13,19 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TypeOverviewChart(
     chartData: TypeChartData,
-    typeData: TypeOverviewData
+    typeData: TypeOverviewData,
+    modifier: Modifier
 ) {
-    Column(modifier = Modifier.padding(8.dp)) {
+    Column(modifier = modifier.padding(8.dp)) {
         VerticalProgress(
             modifier = Modifier
-                .height(15.dp)
                 .weight(.3F)
                 .align(CenterHorizontally),
             progress = chartData.percentage,
-            //color = typeData.type.color,
-            //trackColor = typeData.type.invertedColor
+            color = typeData.type.color,
+            invertedColor = typeData.type.invertedColor
         )
-        Text(text = chartData.formattedSum)
+        //Text(text = chartData.formattedSum)
         Spacer(modifier = Modifier.height(6.dp))
         Text(text = chartData.date)
     }

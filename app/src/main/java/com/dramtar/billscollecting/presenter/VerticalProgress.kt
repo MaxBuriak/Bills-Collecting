@@ -24,9 +24,7 @@ fun VerticalProgress(
     val mProgress = animateFloatAsState(targetValue = progress / 100)
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.LightGray)
-            .width(16.dp)
+            .width(24.dp)
     ) {
         Box(
             modifier = Modifier
@@ -35,11 +33,11 @@ fun VerticalProgress(
         )
         Box(
             modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp))
                 .weight(mProgress.value)
                 .fillMaxWidth()
                 .background(
-                    Brush.verticalGradient(listOf(invertedColor, color))
+                    Brush.verticalGradient(listOf(color,invertedColor))
                 )
         )
     }
