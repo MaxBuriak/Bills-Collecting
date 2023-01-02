@@ -12,6 +12,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.Color.Companion.Yellow
 import androidx.compose.ui.res.stringResource
@@ -115,7 +116,7 @@ fun TypeOverviewScreen(
                             text = it,
                             modifier = Modifier
                                 .weight(1F)
-                                .background(Yellow),
+                                .background(Red),
                             textAlign = TextAlign.Center
                         )
                     }
