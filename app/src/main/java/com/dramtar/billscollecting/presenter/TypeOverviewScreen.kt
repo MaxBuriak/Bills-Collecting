@@ -108,7 +108,7 @@ fun TypeOverviewScreen(
                     .padding(start = 16.dp, end = 16.dp)
             )
             Spacer(modifier = Modifier.height(6.dp))
-            Row(modifier = Modifier.height(250.dp), verticalAlignment = Alignment.Top) {
+            Row(modifier = Modifier.height(255.dp), verticalAlignment = Alignment.Top) {
                 Column(verticalArrangement = Arrangement.Center) {
                     Spacer(modifier = Modifier.weight(1F))
                     typeOverviewData.separatorAmount.forEach {
@@ -128,7 +128,7 @@ fun TypeOverviewScreen(
                             TypeOverviewChart(
                                 typeData = typeOverviewData,
                                 chartData = chartData,
-                                modifier = Modifier.height(250.dp)
+                                modifier = Modifier.height(255.dp)
                             )
                         }
                     }
