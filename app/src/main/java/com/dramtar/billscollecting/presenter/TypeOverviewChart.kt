@@ -13,10 +13,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TypeOverviewChart(
     chartData: TypeChartData,
-    typeData: TypeOverviewData,
-    modifier: Modifier
+    typeData: TypeOverviewData
 ) {
-    Column(modifier = modifier.padding(8.dp)) {
+    Column() {
         VerticalProgress(
             modifier = Modifier
                 .weight(.3F)

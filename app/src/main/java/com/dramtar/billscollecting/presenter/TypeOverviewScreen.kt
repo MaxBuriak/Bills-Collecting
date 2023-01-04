@@ -3,7 +3,6 @@ package com.dramtar.billscollecting.presenter
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,7 +11,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color.Companion.Green
-import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.Color.Companion.Yellow
 import androidx.compose.ui.res.stringResource
@@ -108,31 +106,47 @@ fun TypeOverviewScreen(
                     .padding(start = 16.dp, end = 16.dp)
             )
             Spacer(modifier = Modifier.height(6.dp))
-            Row(modifier = Modifier.height(255.dp), verticalAlignment = Alignment.Top) {
-                Column(verticalArrangement = Arrangement.Center) {
-                    Spacer(modifier = Modifier.weight(1F))
+            Box() {
+                Column(modifier = Modifier
+                    .width(100.dp)
+                    .height(230.dp)) {
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1F)
+                            .width(8.dp)
+                            .background(Yellow)
+                    )
                     typeOverviewData.separatorAmount.forEach {
-                        Text(
-                            text = it,
+                        Box(
                             modifier = Modifier
                                 .weight(1F)
-                                .background(Red),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                LazyRow() {
-                    typeOverviewData.gpdByDate?.forEach { chartData ->
-                        item {
-                            TypeOverviewChart(
-                                typeData = typeOverviewData,
-                                chartData = chartData,
-                                modifier = Modifier.height(255.dp)
+                                .background(Yellow)
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = it,
+                                modifier = Modifier.align(Alignment.BottomEnd),
+                                textAlign = TextAlign.Center
                             )
                         }
                     }
-
+                }
+                Row(
+                    modifier = Modifier
+                        .padding(
+                            start = 108.dp,
+                            top = 8.dp,
+                            end = 8.dp,
+                            bottom = 8.dp,
+                        )
+                        .height(250.dp)
+                ) {
+                    typeOverviewData.gpdByDate?.forEach { chartData ->
+                        TypeOverviewChart(
+                            typeData = typeOverviewData,
+                            chartData = chartData
+                        )
+                    }
                 }
             }
         }
