@@ -175,7 +175,8 @@ class MainViewModel @Inject constructor(
     }
 
     //TODO REWORK
-    private suspend fun getGroupedByMonthBillsList(list: List<BillData>): List<TypeChartData> {
+    private suspend fun getGroupedByMonthBillsList(list: List<BillData>): List<TypeChartData>? {
+        if(list.isEmpty()) return null //TODO need optimize
         val groupedBills = list.groupBy { it.date.getMonth() }
         val maxSum =
             groupedBills.entries.maxOf { groupedList -> groupedList.value.sumOf { bill -> bill.amount } }
@@ -195,6 +196,7 @@ class MainViewModel @Inject constructor(
     private fun getTypeOverview(type: BillTypeData) {
         viewModelScope.launch {
             val bills = repository.getAllBillsByTypeID(type)
+            if (bills.isEmpty()) return@launch //TODO need optimize and add some error
             val groupedList = getGroupedByMonthBillsList(bills)
             val totalSum = bills.sumOf { it.amount }
             var currMonthSum = 0.0

@@ -109,13 +109,8 @@ fun TypeOverviewScreen(
             Box() {
                 Column(modifier = Modifier
                     .width(100.dp)
-                    .height(230.dp)) {
-                    Spacer(
-                        modifier = Modifier
-                            .weight(1F)
-                            .width(8.dp)
-                            .background(Yellow)
-                    )
+                    .height(210.dp)
+                    .padding(top = 8.dp)) {
                     typeOverviewData.separatorAmount.forEach {
                         Box(
                             modifier = Modifier
