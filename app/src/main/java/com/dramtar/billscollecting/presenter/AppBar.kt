@@ -51,7 +51,7 @@ fun AppBar(
                 ) {
 
                     Text(
-                        text = stringResource(id = R.string.total_sum_title, totalSum),
+                        text = stringResource(id = R.string.total_sum_placeholder, totalSum),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,

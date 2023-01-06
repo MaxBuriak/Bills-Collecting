@@ -27,6 +27,10 @@ class LocalDataSourceImpl @Inject constructor(
         return billDao.getAllBills()
     }
 
+    override suspend fun getAllBillsByTypeID(typeID: String): List<BillEntity> {
+        return billDao.getAllBillsByTypeID(typeID = typeID)
+    }
+
     override suspend fun saveBillType(billEntity: BillTypeEntity) {
         billTypeDao.saveBillType(billEntity)
     }

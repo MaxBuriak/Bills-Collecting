@@ -20,12 +20,13 @@ fun AmountChartItem(
     data: BillTypeData,
     amount: String,
     progress: Float,
-    formattedPercentage: String
+    formattedPercentage: String,
+    onTypeClicked: (BillTypeData) -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         BillTypeItem(
             data = data,
-            onBillTypeSelected = {},
+            onBillTypeSelected = { onTypeClicked(it) },
             onNameChanged = {},
             onDeleteButtonClick = {},
             modifier = Modifier.weight(.3F)

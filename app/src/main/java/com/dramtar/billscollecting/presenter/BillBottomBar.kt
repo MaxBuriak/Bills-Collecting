@@ -193,6 +193,7 @@ fun BillBottomBar(
                     item {
                         BillTypeItem(
                             data = billType,
+                            selectedBillType = BillTypeData(),
                             onBillTypeSelected = {},
                             modifier = Modifier.height(73.dp),
                             onNameChanged = { billTypeName.value = it },

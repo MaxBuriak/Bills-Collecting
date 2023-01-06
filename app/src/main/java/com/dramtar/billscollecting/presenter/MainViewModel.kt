@@ -25,6 +25,8 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.ceil
+import kotlin.math.pow
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -114,6 +116,7 @@ class MainViewModel @Inject constructor(
             is UIEvent.ExportToCSV -> exportBillsOverviewToCSVFile(event.file)
             is UIEvent.ShowAllBillsOverviewData -> getAllBillsOverviewData()
             is UIEvent.ShowCurrentMonthBillsOverviewData -> getCurrentMonthBillsOverviewData()
+            is UIEvent.ShowTypeOverview -> getTypeOverview(event.type)
         }
     }
 
@@ -166,9 +169,78 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getGroupedByDateBillsList() {
+    private suspend fun getGroupedByDayBillsList() {
         billListState =
             billListState.copy(gropedByDateBills = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
+    }
+
+    //TODO REWORK
+    private suspend fun getGroupedByMonthBillsList(list: List<BillData>): List<TypeChartData>? {
+        if(list.isEmpty()) return null //TODO need optimize
+        val groupedBills = list.groupBy { it.date.getMonth() }
+        val maxSum =
+            groupedBills.entries.maxOf { groupedList -> groupedList.value.sumOf { bill -> bill.amount } }
+        return groupedBills.map {
+            val sum = it.value.sumOf { bill -> bill.amount }
+            val percentage = (sum / maxSum).toFloat() * 100
+            TypeChartData(
+                date = it.key,
+                sum = sum,
+                formattedSum = sum.fmtShortLocalCurrency(),
+                percentage = percentage,
+                formattedPercentage = percentage.fmtPercentage(),
+            )
+        }
+    }
+
+    private fun getTypeOverview(type: BillTypeData) {
+        viewModelScope.launch {
+            val bills = repository.getAllBillsByTypeID(type)
+            if (bills.isEmpty()) return@launch //TODO need optimize and add some error
+            val groupedList = getGroupedByMonthBillsList(bills)
+            val totalSum = bills.sumOf { it.amount }
+            var currMonthSum = 0.0
+            var currMonthsPercentage = 0F
+
+            val startDate = bills.first().date.getMonthYear()
+            val endDate = bills.last().date.getMonthYear()
+            val fmtPeriodOfTime = if (startDate == endDate) startDate else "$startDate - $endDate"
+            val maxSum = bills.maxOf { it.amount }
+
+            val length = maxSum.toInt().toString().length / 2 //TODO NEED TO OPTIMIZE
+            val multiplayer = 10.0.pow(length)
+            val a = (maxSum / 2.0) / multiplayer.toInt()
+
+            val separator = (ceil(a) * multiplayer)
+            billListState.bills?.let { currBills ->
+                val typeGrp =
+                    overviewData(currBills).gropedByTypesBills?.find { it.type.id == type.id }
+                typeGrp?.let {
+                    currMonthSum = it.sumAmount
+                    currMonthsPercentage = it.percentage
+                }
+            }
+
+            val data = TypeOverviewData(
+                type = type,
+                gpdByDate = groupedList,
+                sumTotal = totalSum,
+                fmtSumTotal = totalSum.fmtLocalCurrency(),
+                sumCurrMonth = currMonthSum,
+                fmtSumCurrAmount = currMonthSum.fmtLocalCurrency(),
+                currMonthPercentage = currMonthsPercentage,
+                fmtCurrMonthPercentage = currMonthsPercentage.fmtPercentage(),
+                fmtPeriodOfTime = fmtPeriodOfTime,
+                maxSum = maxSum,
+                separatorAmount = listOf(
+                    (separator * 2).fmtLocalCurrency(),
+                    separator.fmtLocalCurrency(),
+                    (0).fmtLocalCurrency()
+                )
+            )
+            billListState = billListState.copy(typeOverviewData = data)
+            updatingEvent.send(UIUpdatingEvent.NavigateToTypeOverview)
+        }
     }
 
     private fun getMinMaxDate(): MinMaxDateInMilli {
@@ -218,7 +290,7 @@ class MainViewModel @Inject constructor(
                         totalSum = sum,
                         formattedTotalSum = sum.getFMTLocalCur()
                     )
-                    getGroupedByDateBillsList()
+                    getGroupedByDayBillsList()
                 }
         }
     }

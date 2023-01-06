@@ -10,6 +10,7 @@ private const val DATE_DAY_MONTH_YEAR_FORMAT = "dd/MM/yyyy"
 private const val DATE_DAY_DAY_OF_WEEK_FORMAT = "EEE dd MMM"
 private const val DATE_HOUR_MINUTE_FORMAT = "HH:mm"
 private const val DATE_MONTH_YEAR_FORMAT = "MMM yyyy"
+private const val DATE_MONTH_FORMAT = "MMM"
 
 fun Long.getTimeStamp(): String {
     val date = Date(this)
@@ -28,6 +29,13 @@ fun Long.getYearMonthDay(): String {
 fun Long.getMonthYear(): String {
     val date = Date(this)
     val simpleDateFormat = SimpleDateFormat(DATE_MONTH_YEAR_FORMAT, Locale.getDefault())
+    simpleDateFormat.timeZone = TimeZone.getDefault()
+    return simpleDateFormat.format(date)
+}
+
+fun Long.getMonth(): String {
+    val date = Date(this)
+    val simpleDateFormat = SimpleDateFormat(DATE_MONTH_FORMAT, Locale.getDefault())
     simpleDateFormat.timeZone = TimeZone.getDefault()
     return simpleDateFormat.format(date)
 }
