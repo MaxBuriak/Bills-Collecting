@@ -161,6 +161,13 @@ fun MainScreen(
                                                 onItemClick = {},
                                                 onDeleteButtonClick = { data ->
                                                     viewModel.onBillEvent(BillEvent.Delete(data))
+                                                },
+                                                onBillTypeClicked = {
+                                                    viewModel.onUiEvent(
+                                                        UIEvent.ShowTypeOverview(
+                                                            it
+                                                        )
+                                                    )
                                                 }
                                             )
                                         }

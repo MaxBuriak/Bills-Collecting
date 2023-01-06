@@ -9,6 +9,7 @@ interface LocalDataSource {
     suspend fun getBills(start: Long, end: Long): Flow<List<BillEntity>>
     suspend fun deleteBill(id: Int)
     suspend fun getAllBill(): List<BillEntity>
+    suspend fun getAllBillsByTypeID(typeID: String): List<BillEntity>
 
     suspend fun saveBillType(billEntity: BillTypeEntity)
     suspend fun getBillTypes(): Flow<List<BillTypeEntity>>
