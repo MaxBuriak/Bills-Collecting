@@ -186,7 +186,7 @@ class MainViewModel @Inject constructor(
             TypeChartData(
                 date = it.key,
                 sum = sum,
-                formattedSum = sum.getFMTLocalCur(),
+                formattedSum = sum.fmtShortLocalCurrency(),
                 percentage = percentage,
                 formattedPercentage = percentage.fmtPercentage(),
             )
@@ -204,7 +204,7 @@ class MainViewModel @Inject constructor(
 
             val startDate = bills.first().date.getMonthYear()
             val endDate = bills.last().date.getMonthYear()
-            val fmtPeriodOfTime = if (startDate == endDate) startDate else "$endDate - $startDate"
+            val fmtPeriodOfTime = if (startDate == endDate) startDate else "$startDate - $endDate"
             val maxSum = bills.maxOf { it.amount }
 
             val length = maxSum.toInt().toString().length / 2 //TODO NEED TO OPTIMIZE
