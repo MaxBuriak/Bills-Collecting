@@ -12,6 +12,7 @@ data class TypeOverviewData(
     val currMonthPercentage: Float = 0F,
     val fmtCurrMonthPercentage: String = "",
     val fmtPeriodOfTime: String = "",
+    val fmtCurrPeriodOfTime: String = "",
     val maxSum: Double = 0.0,
     val separatorAmount:List<String> = listOf()
 )
