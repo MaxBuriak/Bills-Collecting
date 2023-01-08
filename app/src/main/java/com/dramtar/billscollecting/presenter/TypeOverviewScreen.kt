@@ -78,7 +78,7 @@ fun TypeOverviewScreen(
                 Text(
                     text = typeOverviewData.fmtSumCurrAmount,
                     modifier = Modifier.weight(1F),
-                    fontSize = 26.sp,
+                    fontSize = 30.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                     color = typeOverviewData.type.invertedColor
