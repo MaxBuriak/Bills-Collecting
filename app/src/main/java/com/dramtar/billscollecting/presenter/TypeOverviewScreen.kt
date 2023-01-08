@@ -65,7 +65,7 @@ fun TypeOverviewScreen(
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = stringResource(id = R.string.curr_month_title),
+                text = typeOverviewData.fmtCurrPeriodOfTime,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 color = typeOverviewData.type.invertedColor
@@ -78,7 +78,7 @@ fun TypeOverviewScreen(
                 Text(
                     text = typeOverviewData.fmtSumCurrAmount,
                     modifier = Modifier.weight(1F),
-                    fontSize = 26.sp,
+                    fontSize = 30.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                     color = typeOverviewData.type.invertedColor

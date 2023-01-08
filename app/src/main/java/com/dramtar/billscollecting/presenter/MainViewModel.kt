@@ -54,7 +54,7 @@ class MainViewModel @Inject constructor(
                         amount = event.amount
                     )
                     repository.saveBill(billData = bill)
-                    val type = billListState.billTypes.find { it.id == billListState.selectedBillType.id } // check if its necessary
+                    val type = billListState.billTypes.find { it.id == billListState.selectedBillType.id } // TODO check if its necessary
                     type?.let { increaseBillTypePriority(it) }
                     updatingEvent.send(UIUpdatingEvent.AddBillTypeClicked)
                 }
@@ -176,7 +176,7 @@ class MainViewModel @Inject constructor(
 
     //TODO REWORK
     private suspend fun getGroupedByMonthBillsList(list: List<BillData>): List<TypeChartData>? {
-        if(list.isEmpty()) return null //TODO need optimize
+        if (list.isEmpty()) return null //TODO need optimize
         val groupedBills = list.groupBy { it.date.getMonth() }
         val maxSum =
             groupedBills.entries.maxOf { groupedList -> groupedList.value.sumOf { bill -> bill.amount } }
@@ -231,6 +231,7 @@ class MainViewModel @Inject constructor(
                 currMonthPercentage = currMonthsPercentage,
                 fmtCurrMonthPercentage = currMonthsPercentage.fmtPercentage(),
                 fmtPeriodOfTime = fmtPeriodOfTime,
+                fmtCurrPeriodOfTime = billListState.selectedDateRange.time.getMonth(),
                 maxSum = maxSum,
                 separatorAmount = listOf(
                     (separator * 2).fmtLocalCurrency(),
