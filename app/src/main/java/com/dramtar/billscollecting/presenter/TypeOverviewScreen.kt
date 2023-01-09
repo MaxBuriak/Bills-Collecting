@@ -91,7 +91,7 @@ fun TypeOverviewScreen(
                     modifier = Modifier
                         .weight(1F)
                         .align(Alignment.CenterVertically),
-                    fontSize = 26.sp,
+                    fontSize = 28.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                     color = typeOverviewData.type.invertedColor
