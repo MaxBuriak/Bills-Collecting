@@ -68,25 +68,26 @@ fun OverviewScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 )
+                overviewData?.let {
+                    Text(
+                        text = it.fmtPeriodOfTime,
+                        fontSize = 28.sp,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(CenterHorizontally),
+                    )
 
-                Text(
-                    text = overviewData?.fmtPeriodOfTime ?: "", //TODO need FIX
-                    fontSize = 28.sp,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(CenterHorizontally),
-                )
-
-                Text(
-                    text = stringResource(
-                        id = R.string.total_sum_placeholder,
-                        overviewData?.fmtTotalSum ?: 0
-                    ),
-                    fontSize = 28.sp,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(CenterHorizontally),
-                )
+                    Text(
+                        text = stringResource(
+                            id = R.string.total_sum_placeholder,
+                            it.fmtTotalSum
+                        ),
+                        fontSize = 28.sp,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(CenterHorizontally),
+                    )
+                }
 
                 overviewData?.gropedByTypesBills?.let { list ->
                     LazyColumn(

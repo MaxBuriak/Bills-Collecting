@@ -54,8 +54,7 @@ class MainViewModel @Inject constructor(
                         amount = event.amount
                     )
                     repository.saveBill(billData = bill)
-                    val type = billListState.billTypes.find { it.id == billListState.selectedBillType.id } // TODO check if its necessary
-                    type?.let { increaseBillTypePriority(it) }
+                    increaseBillTypePriority(billListState.selectedBillType)
                     updatingEvent.send(UIUpdatingEvent.AddBillTypeClicked)
                 }
             }
@@ -174,9 +173,8 @@ class MainViewModel @Inject constructor(
             billListState.copy(gropedByDateBills = billListState.bills?.groupBy { it.date.getDayDayOfWeek() })
     }
 
-    //TODO REWORK
     private suspend fun getGroupedByMonthBillsList(list: List<BillData>): List<TypeChartData>? {
-        if (list.isEmpty()) return null //TODO need optimize
+        if (list.isEmpty()) return null //TODO need optimize need add error processing
         val groupedBills = list.groupBy { it.date.getMonth() }
         val maxSum =
             groupedBills.entries.maxOf { groupedList -> groupedList.value.sumOf { bill -> bill.amount } }
