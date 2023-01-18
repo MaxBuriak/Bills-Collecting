@@ -29,7 +29,7 @@ fun TypeOverviewChart(
             color = typeData.type.color,
             invertedColor = typeData.type.invertedColor
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Text(text = chartData.date)
     }
 
