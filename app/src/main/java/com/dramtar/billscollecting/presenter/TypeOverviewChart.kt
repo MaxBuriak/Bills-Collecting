@@ -20,7 +20,7 @@ fun TypeOverviewChart(
 
     }) {
         Text(text = chartData.formattedSum)
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         VerticalProgress(
             modifier = Modifier
                 .weight(.3F)
@@ -29,7 +29,7 @@ fun TypeOverviewChart(
             color = typeData.type.color,
             invertedColor = typeData.type.invertedColor
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Text(text = chartData.date)
     }
 
