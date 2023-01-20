@@ -218,7 +218,7 @@ class MainViewModel @Inject constructor(
                     currMonthsPercentage = it.percentage
                 }
             }
-
+//TODO check to remove it
             val data = TypeOverviewData(
                 type = type,
                 gpdByDate = groupedList,
