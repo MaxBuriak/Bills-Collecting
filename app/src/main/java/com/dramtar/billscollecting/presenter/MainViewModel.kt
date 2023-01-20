@@ -205,7 +205,7 @@ class MainViewModel @Inject constructor(
             val fmtPeriodOfTime = if (startDate == endDate) startDate else "$startDate - $endDate"
             val maxSum = bills.maxOf { it.amount }
 
-            val length = maxSum.toInt().toString().length / 2 //TODO NEED TO OPTIMIZE
+            val length = maxSum.toInt().toString().length / 2 //TODO NEED TO OPTIMIZE// need remove
             val multiplayer = 10.0.pow(length)
             val a = (maxSum / 2.0) / multiplayer.toInt()
 
@@ -218,7 +218,7 @@ class MainViewModel @Inject constructor(
                     currMonthsPercentage = it.percentage
                 }
             }
-//TODO check to remove it
+            //TODO check to remove it
             val data = TypeOverviewData(
                 type = type,
                 gpdByDate = groupedList,
