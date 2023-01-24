@@ -43,7 +43,7 @@ fun TypeOverviewScreen(
             Spacer(modifier = Modifier.height(34.dp))
             Text(
                 text = typeOverviewData.type.name,
-                fontSize = 30.sp,
+                fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 color = typeOverviewData.type.invertedColor
@@ -66,7 +66,7 @@ fun TypeOverviewScreen(
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = typeOverviewData.fmtCurrPeriodOfTime,
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 textAlign = TextAlign.Center,
                 color = typeOverviewData.type.invertedColor
             )
