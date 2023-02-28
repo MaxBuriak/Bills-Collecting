@@ -195,7 +195,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val bills = repository.getAllBillsByTypeID(type)
             if (bills.isEmpty()) return@launch //TODO need optimize and add some error
-            val groupedList = getGroupedByMonthBillsList(bills)
+            val groupedList = getGroupedByMonthBillsList(bills)?.takeLast(6) //TODO MAKE constant
             val totalSum = bills.sumOf { it.amount }
             var currMonthSum = 0.0
             var currMonthsPercentage = 0F
