@@ -1,6 +1,7 @@
 package com.dramtar.billscollecting.presenter
 
 import android.app.DatePickerDialog
+import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -125,8 +126,8 @@ fun BillBottomBar(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1F)
-                        .onFocusChanged {
-                            onAmountClicked()
+                        .onFocusChanged { focus ->
+                            if (focus.isFocused) onAmountClicked()
                         },
                     singleLine = true,
                     maxLines = 1
