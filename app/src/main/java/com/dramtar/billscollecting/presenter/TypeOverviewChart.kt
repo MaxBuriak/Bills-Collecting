@@ -1,6 +1,5 @@
 package com.dramtar.billscollecting.presenter
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -16,9 +15,7 @@ fun TypeOverviewChart(
     chartData: TypeChartData,
     typeData: TypeOverviewData
 ) {
-    Column(Modifier.padding(8.dp).clickable {
-
-    }) {
+    Column(Modifier.padding(7.dp)) {
         Text(text = chartData.formattedSum)
         Spacer(modifier = Modifier.height(8.dp))
         VerticalProgress(
@@ -30,7 +27,10 @@ fun TypeOverviewChart(
             invertedColor = typeData.type.invertedColor
         )
         Spacer(modifier = Modifier.height(10.dp))
-        Text(text = chartData.date)
+        Text(
+            text = chartData.date,
+            modifier = Modifier.align(CenterHorizontally)
+        )
     }
 
 }
