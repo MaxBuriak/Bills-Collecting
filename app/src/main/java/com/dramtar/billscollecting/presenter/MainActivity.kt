@@ -4,7 +4,6 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
@@ -12,14 +11,21 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.dramtar.billscollecting.R
+import com.dramtar.billscollecting.presenter.bills.BillsScreen
+import com.dramtar.billscollecting.presenter.overview.OverviewScreen
+import com.dramtar.billscollecting.presenter.overview.OverviewState
+import com.dramtar.billscollecting.presenter.type_overview.TypeOverviewScreen
 import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 import com.dramtar.billscollecting.utils.FileUtils
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.io.File
 
 @ExperimentalFoundationApi
@@ -27,49 +33,85 @@ import java.io.File
 @ExperimentalMaterialApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            NavHost(navController, startDestination = "main") {
-                composable("main") { MainScreen(navController, viewModel = viewModel) }
-                composable("overview") {
+            NavHost(navController, startDestination = Screen.BillsScreen.route) {
+                composable(route = Screen.BillsScreen.route) {
+                    BillsScreen(
+                        navController,
+                        billAdded = { playAddBillSound() }
+                    )
+                }
+                composable(
+                    route = Screen.OverviewScreen.route
+                            + "?minDate={minDate}&maxDate={maxDate}",
+                    arguments = listOf(
+                        navArgument(
+                            name = "minDate"
+                        ) {
+                            type = NavType.LongType
+                            defaultValue = -1L
+                        },
+                        navArgument(
+                            name = "maxDate"
+                        ) {
+                            type = NavType.LongType
+                            defaultValue = -1L
+                        }
+                    )
+                ) {
                     OverviewScreen(
                         navController,
-                        overviewData = viewModel.billListState.overviewData,
-                        onExportCLicked = { exportDatabaseToCSVFile() },
-                        onTestClick = { playAddBillSound() },
-                        onTypeClicked = { viewModel.onUiEvent(UIEvent.ShowTypeOverview(it)) })
+                        onExportCLicked = { overviewState ->
+                            exportBillsOverviewToCSVFile(overviewState)
+                        })
                 }
-                composable("type_overview") {
+                composable(
+                    route = Screen.TypeOverviewScreen.route + "?typeId={typeId}",
+                    arguments = listOf(navArgument(
+                        name = "typeId"
+                    ) {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    })
+                ) {
                     TypeOverviewScreen(
                         navController = navController,
-                        modifier = Modifier,
-                        typeOverviewData = viewModel.billListState.typeOverviewData
+                        modifier = Modifier
                     )
                 }
             }
-
-            lifecycleScope.launchWhenStarted {
-                viewModel.updatingEvents.collectLatest { event ->
-                    when (event) {
-                        is UIUpdatingEvent.OpenCreatedCSV -> {
-                            startActivityWithCSVFile(event.file)
-                        }
-                        is UIUpdatingEvent.AddBillTypeClicked -> playAddBillSound()
-                        is UIUpdatingEvent.NavigateToOverview -> navController.navigate("overview")
-                        is UIUpdatingEvent.NavigateToTypeOverview -> navController.navigate("type_overview")
-                    }
-                }
-            }
         }
-
     }
 
-    private fun exportDatabaseToCSVFile() {
-        val csvFile = FileUtils.generateFile(context = this, fileName = viewModel.getCSVFileName())
-        csvFile?.let { viewModel.onUiEvent(UIEvent.ExportToCSV(it)) }
+    private fun exportBillsOverviewToCSVFile(overviewState: OverviewState) {
+        val csvFile = FileUtils.generateFile(
+            context = this,
+            fileName = "${overviewState.fmtPeriodOfTime} Bills overview.csv"
+        )
+        csvFile?.let {
+            lifecycleScope.launch { //TODO CHECK THIS
+                val overviewBillsList = overviewState.gropedByTypesBills
+                val formattedDate = overviewState.fmtPeriodOfTime
+                csvWriter().open(csvFile, append = false) {
+                    writeRow(listOf("", "Overview for $formattedDate"))
+                    writeRow(listOf("Type", "Amount of payments", "Percentage"))
+                    overviewBillsList?.forEach { bill ->
+                        writeRow(
+                            listOf(
+                                bill.type.name,
+                                bill.formattedSumAmount,
+                                bill.formattedPercentage
+                            )
+                        )
+                    }
+                    writeRow(listOf("Total sum", overviewState.fmtTotalSum))
+                }
+                startActivityWithCSVFile(csvFile)
+            }
+        }
     }
 
     private fun playAddBillSound() {
