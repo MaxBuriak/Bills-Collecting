@@ -48,7 +48,7 @@ class BillsViewModel @Inject constructor(
                 }
             }
             is BillEvent.Delete -> {
-                event.data.id?.let { id -> viewModelScope.launch { billsRepository.deleteBill(id) } }
+                viewModelScope.launch { billsRepository.deleteBill(event.data) }
             }
         }
     }

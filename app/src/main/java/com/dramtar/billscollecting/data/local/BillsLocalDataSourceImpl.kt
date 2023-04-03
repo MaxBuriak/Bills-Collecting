@@ -16,8 +16,8 @@ class BillsLocalDataSourceImpl @Inject constructor(
         return billDao.getBills(start = start, end = end)
     }
 
-    override suspend fun deleteBill(id: Int) {
-        billDao.deleteBill(id)
+    override suspend fun deleteBill(billEntity: BillEntity) {
+        billDao.deleteBill(billEntity)
     }
 
     override suspend fun getAllBill(): List<BillEntity> {

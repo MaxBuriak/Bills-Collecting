@@ -30,8 +30,8 @@ class BillsRepositoryImpl @Inject constructor(
         localDataSource.saveBill(billData.mapToBillEntity())
     }
 
-    override suspend fun deleteBill(id: Int) {
-        localDataSource.deleteBill(id)
+    override suspend fun deleteBill(billData: BillData) {
+        localDataSource.deleteBill(billData.mapToBillEntity())
     }
 
     override suspend fun getAllBills(): List<BillData> {
