@@ -1,7 +1,9 @@
 package com.dramtar.billscollecting.di
 
-import com.dramtar.billscollecting.data.repository.RepositoryImpl
-import com.dramtar.billscollecting.domain.Repository
+import com.dramtar.billscollecting.data.repository.BillTypesRepositoryImpl
+import com.dramtar.billscollecting.data.repository.BillsRepositoryImpl
+import com.dramtar.billscollecting.domain.BillTypesRepository
+import com.dramtar.billscollecting.domain.BillsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -11,5 +13,7 @@ import dagger.hilt.components.SingletonComponent
 @Module
 abstract class RepositoryModule {
     @Binds
-    abstract fun bindRepository(repositoryImpl: RepositoryImpl): Repository
+    abstract fun bindBillsRepository(billsRepositoryImpl: BillsRepositoryImpl): BillsRepository
+    @Binds
+    abstract fun bindBillTypesRepository(billTypesRepositoryImpl: BillTypesRepositoryImpl): BillTypesRepository
 }

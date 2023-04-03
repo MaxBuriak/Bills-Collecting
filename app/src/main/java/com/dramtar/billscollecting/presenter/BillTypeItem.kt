@@ -71,9 +71,9 @@ fun BillTypeItem(
                 )
                 .combinedClickable(
                     onClick = {
-                    if (!deleteButtonState.value) onBillTypeSelected(data)
-                    deleteButtonState.value = false
-                }, onLongClick = { deleteButtonState.value = true }
+                        if (!deleteButtonState.value) onBillTypeSelected(data)
+                        deleteButtonState.value = false
+                    }, onLongClick = { deleteButtonState.value = true }
                 )
         ) {
             if (data.name.isBlank()) {
