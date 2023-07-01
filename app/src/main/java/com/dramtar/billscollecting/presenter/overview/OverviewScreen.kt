@@ -102,7 +102,7 @@ fun OverviewScreen(
                                 progress = chartItem.percentage,
                                 formattedPercentage = chartItem.formattedPercentage,
                                 onTypeClicked = {
-                                    navController.navigate(Screen.TypeOverviewScreen.route + "?typeId={${it.id}}")
+                                    navController.navigate(Screen.TypeOverviewScreen.route + "?typeId=${it.id}")
                                 }
                             )
                         }
