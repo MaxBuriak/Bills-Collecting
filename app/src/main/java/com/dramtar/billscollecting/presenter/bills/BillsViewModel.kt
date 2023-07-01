@@ -59,6 +59,7 @@ class BillsViewModel @Inject constructor(
                 val newRndColor = Color.getRndColor()
                 billListState = billListState.copy(
                     tmpBillType = BillTypeData(
+                        id = "",
                         name = "",
                         color = newRndColor,
                         invertedColor = newRndColor.getOnColor()
