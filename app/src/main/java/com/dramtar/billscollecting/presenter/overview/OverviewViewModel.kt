@@ -41,6 +41,7 @@ class OverviewViewModel @Inject constructor(
     }
 
     private fun overviewData(bills: List<BillData>): OverviewState {
+        if (bills.isEmpty()) return OverviewState()
         val groupedBills = bills.groupBy { it.billTypeData }
         val totalSum = bills.sumOf { it.amount }
         val listOfSum = groupedBills.mapValues {
