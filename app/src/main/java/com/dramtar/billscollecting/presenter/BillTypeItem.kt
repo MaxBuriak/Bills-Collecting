@@ -2,19 +2,17 @@ package com.dramtar.billscollecting.presenter
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,24 +55,21 @@ fun BillTypeItem(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
+
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
-                .padding(8.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(data.color)
                 .fillMaxWidth()
-                .padding(vertical = 6.dp, horizontal = 3.dp)
-                .selectable(
-                    selected = selectedBillType?.id == data.id,
-                    onClick = {},
-                )
+                .border(2.dp, if (selectedBillType?.id == data.id) data.invertedColor else Color.Transparent, RoundedCornerShape(10.dp))
                 .combinedClickable(
                     onClick = {
                         if (!deleteButtonState.value) onBillTypeSelected(data)
                         deleteButtonState.value = false
                     }, onLongClick = { deleteButtonState.value = true }
                 )
+                .padding(vertical = 6.dp, horizontal = 3.dp)
         ) {
             if (data.name.isBlank()) {
                 val focusRequester = remember { FocusRequester() }
@@ -93,10 +88,7 @@ fun BillTypeItem(
                         .defaultMinSize(minWidth = 70.dp)
                         .padding(8.dp)
                         .focusRequester(focusRequester),
-                    textStyle = TextStyle(
-                        color = data.invertedColor,
-                        fontSize = 18.sp
-                    ),
+                    textStyle = TextStyle(color = data.invertedColor, fontSize = 18.sp),
                     cursorBrush = Brush.verticalGradient(
                         0.00f to data.invertedColor,
                         0.35f to data.invertedColor,
@@ -118,20 +110,8 @@ fun BillTypeItem(
                     color = data.invertedColor,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
+                    modifier = Modifier.padding(8.dp)
                 )
-
-                if (data.id == selectedBillType?.id) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        tint = data.invertedColor,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(8.dp)
-                    )
-                }
             }
         }
         if (deleteButtonState.value && selectedBillType != null) {

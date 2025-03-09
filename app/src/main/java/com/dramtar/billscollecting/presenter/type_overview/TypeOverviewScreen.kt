@@ -1,11 +1,17 @@
 package com.dramtar.billscollecting.presenter.type_overview
 
+import BillsCollectingTheme
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -19,7 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.dramtar.billscollecting.presenter.overview.components.TypeOverviewChart
-import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun TypeOverviewScreen(
@@ -29,48 +35,52 @@ fun TypeOverviewScreen(
 ) {
     val typeOverviewState = viewModel.typeOverviewState
     BillsCollectingTheme {
-        val gradientColor = Brush.verticalGradient(
-            0.2f to typeOverviewState.type.color,
-            1f to typeOverviewState.type.invertedColor
-        )
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(brush = gradientColor),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(34.dp))
-            Text(
-                text = typeOverviewState.type.name,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                color = typeOverviewState.type.invertedColor
+        Scaffold { paddingValues ->
+            val gradientColor = Brush.verticalGradient(
+                0.2f to typeOverviewState.type.color,
+                1f to typeOverviewState.type.invertedColor
             )
-            Spacer(modifier = Modifier.height(14.dp))
-            Text(
-                text = typeOverviewState.fmtPeriodOfTime,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                color = typeOverviewState.type.invertedColor
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = typeOverviewState.fmtSumTotal,
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center,
-                color = typeOverviewState.type.invertedColor
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-/*            Text(
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .consumeWindowInsets(paddingValues)
+                    .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
+                    .background(brush = gradientColor),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(34.dp))
+                Text(
+                    text = typeOverviewState.type.name,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    color = typeOverviewState.type.invertedColor
+                )
+                Spacer(modifier = Modifier.height(14.dp))
+                Text(
+                    text = typeOverviewState.fmtPeriodOfTime,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    color = typeOverviewState.type.invertedColor
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = typeOverviewState.fmtSumTotal,
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center,
+                    color = typeOverviewState.type.invertedColor
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                /*            Text(
                 text = typeOverviewState.fmtCurrPeriodOfTime,
                 fontSize = 22.sp,
                 textAlign = TextAlign.Center,
                 color = typeOverviewState.type.invertedColor
             )
             Spacer(modifier = Modifier.height(8.dp))*/
-            /*Row(
+                /*Row(
                 modifier = Modifier
                     .fillMaxWidth(),
             ) {
@@ -82,7 +92,7 @@ fun TypeOverviewScreen(
                     fontWeight = FontWeight.Bold,
                     color = typeOverviewState.type.invertedColor
                 )*/
-/*                Text(
+                /*                Text(
                     text = stringResource(
                         id = R.string.percent_placeholder,
                         typeOverviewState.fmtCurrMonthPercentage
@@ -96,15 +106,34 @@ fun TypeOverviewScreen(
                     color = typeOverviewState.type.invertedColor
                 )
             }*/
-            Spacer(modifier = Modifier.height(20.dp))
-            Divider(
-                Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .padding(start = 16.dp, end = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-            Row(
+                Spacer(modifier = Modifier.height(20.dp))
+                Divider(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .padding(start = 16.dp, end = 16.dp)
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                val state = rememberLazyListState()
+                val corroutineScope = rememberCoroutineScope()
+                typeOverviewState.gpdByDate?.let { list ->
+                    corroutineScope.launch {
+                        state.scrollToItem(list.size - 1)
+                    }
+
+                    LazyRow(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .height(250.dp),
+                        state = state,
+                    ) {
+                        items(list) { item ->
+                            TypeOverviewChart(typeData = typeOverviewState, chartData = item)
+                        }
+                    }
+                }
+
+                /*Row(
                 modifier = Modifier
                     .padding(8.dp)
                     .height(250.dp),
@@ -115,6 +144,7 @@ fun TypeOverviewScreen(
                         chartData = chartData
                     )
                 }
+            }*/
             }
         }
     }

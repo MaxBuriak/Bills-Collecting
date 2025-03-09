@@ -10,7 +10,6 @@ import com.dramtar.billscollecting.domain.BillData
 import com.dramtar.billscollecting.domain.BillTypeData
 import com.dramtar.billscollecting.domain.BillTypesRepository
 import com.dramtar.billscollecting.domain.BillsRepository
-import com.dramtar.billscollecting.utils.Constants
 import com.dramtar.billscollecting.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -38,7 +37,6 @@ class TypeOverviewViewModel @Inject constructor(
         val bills = billsRepository.getAllBillsByTypeID(type)
         if (bills.isEmpty()) return //TODO need optimize and add some error
         val groupedList = getGroupedByMonthBillsList(bills)
-            ?.takeLast(Constants.NUMBER_OF_OVERVIEW_ITEMS)
         val totalSum = bills.sumOf { it.amount }
 
         val startDate = bills.first().date.getMonthYear()
@@ -54,9 +52,9 @@ class TypeOverviewViewModel @Inject constructor(
         )
     }
 
-    private suspend fun getGroupedByMonthBillsList(list: List<BillData>): List<TypeChartData>? {
+    private fun getGroupedByMonthBillsList(list: List<BillData>): List<TypeChartData>? {
         if (list.isEmpty()) return null //TODO need optimize need add error processing
-        val groupedBills = list.groupBy { it.date.getMonth() }
+        val groupedBills = list.groupBy { it.date.getMonthYear() }
         val maxSum = groupedBills.entries.maxOf { groupedList ->
             groupedList.value.sumOf { bill -> bill.amount }
         }

@@ -1,5 +1,8 @@
 package com.dramtar.billscollecting.domain
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class BillData(
     val id: Int? = null,
     val date: Long = System.currentTimeMillis(),
