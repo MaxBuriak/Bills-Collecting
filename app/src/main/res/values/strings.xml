@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bills Collecting</string>
+    <string name="app_name">Expenses</string>
     <string name="total_sum_placeholder">Total sum %s</string>
     <string name="amount_hint">Amount</string>
     <string name="add_bill_button">Add bill</string>

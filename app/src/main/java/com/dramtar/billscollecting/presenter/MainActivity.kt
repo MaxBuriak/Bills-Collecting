@@ -6,10 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,11 +16,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dramtar.billscollecting.R
-import com.dramtar.billscollecting.presenter.bills.BillsScreen
+import com.dramtar.billscollecting.presenter.bills.MainScreen
 import com.dramtar.billscollecting.presenter.overview.OverviewScreen
 import com.dramtar.billscollecting.presenter.overview.OverviewState
 import com.dramtar.billscollecting.presenter.type_overview.TypeOverviewScreen
-import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 import com.dramtar.billscollecting.utils.FileUtils
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,16 +31,14 @@ import java.io.File
 @ExperimentalMaterialApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
             NavHost(navController, startDestination = Screen.BillsScreen.route) {
                 composable(route = Screen.BillsScreen.route) {
-                    BillsScreen(
-                        navController,
-                        billAdded = { playAddBillSound() }
-                    )
+                    MainScreen(navController, billAdded = { playAddBillSound() })
                 }
                 composable(
                     route = Screen.OverviewScreen.route
@@ -70,17 +66,12 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(
                     route = Screen.TypeOverviewScreen.route + "?typeId={typeId}",
-                    arguments = listOf(navArgument(
-                        name = "typeId"
-                    ) {
+                    arguments = listOf(navArgument(name = "typeId") {
                         type = NavType.StringType
                         defaultValue = ""
                     })
                 ) {
-                    TypeOverviewScreen(
-                        navController = navController,
-                        modifier = Modifier
-                    )
+                    TypeOverviewScreen(navController = navController, modifier = Modifier)
                 }
             }
         }
@@ -120,25 +111,6 @@ class MainActivity : ComponentActivity() {
 
     private fun startActivityWithCSVFile(file: File) {
         val intent = FileUtils.goToFileIntent(this, file)
-        //if (this.packageManager.resolveActivity(intent, 0) == null) {
         startActivity(intent)
-        /*    Toast.makeText(
-                this,
-                "File created and start opening",
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
-            Toast.makeText(
-                this,
-                "Something goes wrong",
-                Toast.LENGTH_LONG
-            ).show()
-        }*/
     }
-}
-
-@Preview
-@Composable
-fun MainPreview() {
-    BillsCollectingTheme {}
 }

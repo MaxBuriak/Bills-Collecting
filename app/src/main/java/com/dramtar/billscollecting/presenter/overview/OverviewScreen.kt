@@ -1,15 +1,24 @@
 package com.dramtar.billscollecting.presenter.overview
 
+import BillsCollectingTheme
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +33,6 @@ import androidx.navigation.NavController
 import com.dramtar.billscollecting.R
 import com.dramtar.billscollecting.presenter.type_overview.components.AmountChartItem
 import com.dramtar.billscollecting.presenter.Screen
-import com.dramtar.billscollecting.ui.theme.BillsCollectingTheme
 
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
@@ -36,75 +44,70 @@ fun OverviewScreen(
 ) {
     val overviewState = overviewViewModel.overviewState
     BillsCollectingTheme {
-        Surface {
-            Column(modifier = Modifier.fillMaxSize()) {
-                Text(
-                    text = stringResource(id = R.string.overview_title),
-                    fontSize = 32.sp,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(CenterHorizontally)
-                )
-
-                Divider(
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    thickness = 1.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.export_title),
-                    fontSize = 28.sp,
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .align(CenterHorizontally)
-                        .clickable { onExportCLicked(overviewState) },
-                )
-                Divider(
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    thickness = 1.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                )
-                overviewState.let {
+        Scaffold { paddingValues ->
+            Surface(modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .consumeWindowInsets(paddingValues)
+                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))){
+                Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
                     Text(
-                        text = it.fmtPeriodOfTime,
-                        fontSize = 28.sp,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .align(CenterHorizontally),
+                        text = stringResource(id = R.string.overview_title),
+                        fontSize = 32.sp,
+                        modifier = Modifier.padding(16.dp).align(CenterHorizontally)
                     )
 
+                    Divider(
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        thickness = 1.dp,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                    )
                     Text(
-                        text = stringResource(
-                            id = R.string.total_sum_placeholder,
-                            it.fmtTotalSum
-                        ),
+                        text = stringResource(id = R.string.export_title),
                         fontSize = 28.sp,
                         modifier = Modifier
-                            .padding(16.dp)
-                            .align(CenterHorizontally),
+                            .padding(12.dp)
+                            .align(CenterHorizontally)
+                            .clickable { onExportCLicked(overviewState) },
                     )
-                }
+                    Divider(
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        thickness = 1.dp,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                    )
+                    overviewState.let {
+                        Text(
+                            text = it.fmtPeriodOfTime,
+                            fontSize = 28.sp,
+                            modifier = Modifier.padding(16.dp).align(CenterHorizontally),
+                        )
 
-                overviewState.gropedByTypesBills?.let { list ->
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1F)
-                    ) {
-                        items(items = list) { chartItem ->
-                            AmountChartItem(
-                                data = chartItem.type,
-                                amount = chartItem.formattedSumAmount,
-                                progress = chartItem.percentage,
-                                formattedPercentage = chartItem.formattedPercentage,
-                                onTypeClicked = {
-                                    navController.navigate(Screen.TypeOverviewScreen.route + "?typeId=${it.id}")
-                                }
-                            )
+                        Text(
+                            text = stringResource(
+                                id = R.string.total_sum_placeholder,
+                                it.fmtTotalSum
+                            ),
+                            fontSize = 28.sp,
+                            modifier = Modifier.padding(16.dp).align(CenterHorizontally),
+                        )
+                    }
+
+                    overviewState.gropedByTypesBills?.let { list ->
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth().weight(1F),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            items(items = list) { chartItem ->
+                                AmountChartItem(
+                                    data = chartItem.type,
+                                    amount = chartItem.formattedSumAmount,
+                                    progress = chartItem.percentage,
+                                    formattedPercentage = chartItem.formattedPercentage,
+                                    onTypeClicked = {
+                                        navController.navigate(Screen.TypeOverviewScreen.route + "?typeId=${it.id}")
+                                    }
+                                )
+                            }
                         }
                     }
                 }
