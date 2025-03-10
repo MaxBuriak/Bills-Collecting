@@ -27,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -39,6 +41,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.dramtar.billscollecting.R
 import com.dramtar.billscollecting.domain.BillTypeData
 import com.dramtar.billscollecting.presenter.BillTypeItem
@@ -66,6 +69,12 @@ fun BillBottomBar(
     val scrollState = rememberLazyListState()
     val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(LocalLifecycleOwner.current) {
+        scope.launch {
+            focusRequester.requestFocus()
+        }
+    }
 
     val mYear: Int
     val mMonth: Int
@@ -94,21 +103,28 @@ fun BillBottomBar(
     CompositionLocalProvider(LocalContentColor provides contentColor) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.fillMaxWidth()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 36.dp)
-                        .clickable { mDatePickerDialog.show() },
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                Card(
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    backgroundColor = MaterialTheme.colorScheme.surfaceBright
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        modifier = Modifier.size(50.dp),
-                        contentDescription = null
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = mDate.value, fontSize = 26.sp)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { mDatePickerDialog.show() }
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            modifier = Modifier.size(50.dp),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            contentDescription = null
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(text = mDate.value, fontSize = 26.sp, color = MaterialTheme.colorScheme.onSurface)
+                    }
                 }
 
                 Column(modifier = Modifier
@@ -116,10 +132,11 @@ fun BillBottomBar(
                     .padding(vertical = 12.dp)) {
                     Text(
                         text = stringResource(id = R.string.types_title),
-                        modifier = Modifier.padding(start = 16.dp, bottom = 6.dp)
+                        modifier = Modifier.padding(start = 16.dp, bottom = 6.dp),
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Divider(
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         thickness = 1.dp,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
                     )
@@ -186,14 +203,21 @@ fun BillBottomBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-                    .background(MaterialTheme.colorScheme.surface)
+                    .background(MaterialTheme.colorScheme.surfaceBright)
                     .padding(horizontal = 16.dp)
             ) {
                 TextField(
                     value = amountInputValue.value,
-                    label = {
+                    prefix ={
+                        Text(
+                        text = "$",
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.headlineSmall
+                    )},
+                    placeholder = {
                         Text(
                             text = stringResource(id = R.string.amount_hint),
+                            color = MaterialTheme.colorScheme.tertiary,
                             style = MaterialTheme.typography.headlineSmall
                         )
                     },
@@ -207,9 +231,10 @@ fun BillBottomBar(
                             focusManager.clearFocus()
                         }),
                     onValueChange = { amountInputValue.value = it },
-                    textStyle = MaterialTheme.typography.headlineSmall,
+                    textStyle = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.onSurface),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .focusRequester(focusRequester)
                         .padding(vertical = 10.dp)
                         .onFocusChanged { focus -> if (focus.isFocused) onAmountClicked() },
                     singleLine = true,
@@ -224,10 +249,10 @@ fun BillBottomBar(
                         amountInputValue.value = amountInputValue.value.copy(text = "")
                         focusManager.clearFocus()
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colorScheme.primary),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colorScheme.secondary),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp)
+                        .padding(top = 8.dp, bottom = 16.dp)
                         .clip(CircleShape)
                 ) {
                     Text(
